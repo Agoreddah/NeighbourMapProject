@@ -435,6 +435,12 @@ on small devices, paste the mobile query code up in the buttons section and styl
 there.
 */
 
+/* Custom code
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+#map_canvas{
+	height:600px;
+}
+
 
 /* Larger than mobile */
 @media (min-width: 400px) {}
