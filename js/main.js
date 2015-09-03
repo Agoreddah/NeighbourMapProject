@@ -6,10 +6,10 @@
  * Version: 1.0.0
  *
  * define globals for jshint */
- /* global google, document */
+ /* global google, document, jQuery */
 
 /*
- * Configuration function with predefined variables
+ * Configuration class with predefined variables
  */
 var Config = function(){
     "use strict";
@@ -24,12 +24,14 @@ var Config = function(){
         cscrollwheel : false,
         zoom : 17
     };
-    this.beerImage = 'images/beer-yellow.png';
+    this.beerImageGray = 'images/beer-gray.png';
+    this.beerImageYellow = 'images/beer-yellow.png';
     this.data = {
         "pubs" : [{
             "id" : 1,
             "title" : "Guiness pub",
             "description" : "Taste of famous ireland dark beer",
+            "type" : "pub",
             "beers" : [
                 { "name" : "staropramen", "quality" : "10", "price" : "1"},
                 { "name" : "staropramen", "quality" : "12", "price" : "1.20"},
@@ -42,6 +44,7 @@ var Config = function(){
             "id" : 2,
             "title" : "Meštianská piváreň",
             "description" : "Old times pub",
+            "type" : "pub",
             "beers" : [
                 { "name" : "krkos", "quality" : "10", "price" : "0.90" },
                 { "name" : "jaros", "quality" : "11", "price" : "1.10" },
@@ -54,7 +57,47 @@ var Config = function(){
 };
 
 /*
- * Main function
+ * User class
+ * TODO user modification form
+ */
+var User = function(){
+    "use strict";
+    var CONFIG = new Config();
+    this.data = {
+        "Tomas" : {
+            "id" : 1,
+            "name" : "Tomas Chudjak",
+            "description" : "This is my current position",
+            "type" : "person",
+            "latitude" : CONFIG.LAT,
+            "longitude" : CONFIG.LNG
+        }
+    };
+};
+
+/**
+ * Foursquare integration
+ * Class stores info about clientId, clientSecret, latitude and longitude of Zilina
+ * query function is used as a seach parameters
+ * dataUrl returns quite complicated set of objects
+ * dataUrl.response.venues contains array of entries
+ */
+var Foursquare = function(){
+    "use strict";
+    var param = "bar";
+    this.clientId = '2TC0GHMY3FTKAY5Y3WSXWTYUT3EY0CL11DOTPSD5BELKYDVU';
+    this.clientSecret = 'ISIT3PFVCZORCQA0J3YGFOJOQ1C3GUZPUDFUKL3LKGRR4O5N';
+    this.zilinaLat = 49.22;
+    this.zilinaLng = 18.74;
+    //TODO generate dynamic query parameter
+    this.query = function(param){
+        return param;
+    };
+    this.dataUrl = "https://api.foursquare.com/v2/venues/search?client_id="+this.clientId+"&client_secret="+this.clientSecret+"&v=20130815&ll="+this.zilinaLat+","+this.zilinaLng+"&query="+this.query(param);
+};
+
+/*
+ * Main functions
  */
 var Neighbour = function(){
     "use strict";
@@ -62,30 +105,42 @@ var Neighbour = function(){
     // set of basic variables
     var NEIGBR = {},
         CONFIG = new Config(),
-        map = new google.maps.Map(CONFIG.CANVAS, CONFIG.mapOptions),
-        data;
+        USER = new User(),
+        FOURSQUARE = new Foursquare(),
+        map = new google.maps.Map(CONFIG.CANVAS, CONFIG.mapOptions);
 
     /**
      * Add markers to the map from json data
      * Knowledge of structure of the json data is critical here !
      */
-    NEIGBR.addMarkers = function(){
+    NEIGBR.addMarkers = function(data){
+        console.log('addmarkers');
         var i = 0,
-            pubs = CONFIG.data.pubs,
-            len = pubs.length,
+            //pubs = CONFIG.data.pubs,
+            len = data.length,
             marker;
         for(i, len; i < len; i++){
-            marker = NEIGBR.createMarker(pubs[i].title, pubs[i].description, pubs[i].latitude, pubs[i].longitude);
+            marker = NEIGBR.createMarker(data[i]);
         }
     };
 
     /**
      * Create info window for giver marker
      */
-    NEIGBR.createInfoWindow = function(marker, title, description){
-        var content = '<h2>'+title+'</h2><p>'+description+'</p>',
-            infoWindow = new google.maps.InfoWindow({
-                content: content
+    NEIGBR.createInfoWindow = function(marker, data){
+        // TODO same solution as in NEIGBR.createMarker function
+        var content, infoWindow;
+        console.log('createInfoWindow');
+        console.log(data);
+        // this statement can indicate if we use foursquare object structure or not
+        if(data.hasOwnProperty('hereNow')){
+            content = '<h2>'+data.name+'</h2><p>'+data.categories[0].name+'</p>';
+        }
+        else{
+            content = '<h2>'+data.name+'</h2><p>'+data.description+'</p>';
+        }
+        infoWindow = new google.maps.InfoWindow({
+            content: content
         });
         marker.addListener('click', function(){
             infoWindow.open(map, marker);
@@ -98,7 +153,7 @@ var Neighbour = function(){
      */
     NEIGBR.createMap = function(){
         // set marker to center position
-        NEIGBR.createMarker('Tomas','it is me here',CONFIG.LAT, CONFIG.LNG);
+        NEIGBR.createMarker(USER.data.Tomas);
 
     };
 
@@ -107,25 +162,67 @@ var Neighbour = function(){
      * Adds marker to defined latlng parameters in map
      * Return marker object
      */
-    NEIGBR.createMarker = function(title, description, latitude, longitude){
-        var marker = new google.maps.Marker({
-            map : map,
-            position : {
-                lat : latitude,
-                lng : longitude
-            },
-            icon : CONFIG.beerImage
-        });
-        NEIGBR.createInfoWindow(marker, title, description);
+    NEIGBR.createMarker = function(data){
+        var marker;
+        // TODO find solution how to use data from foursquare and my own objects
+        // 1. formate my json objects to foursquare structure?
+        // 2. better filter mechanism?
+
+        console.log('createMarker');
+        // this statement can indicate if we use foursquare object structure or not
+        if( data.hasOwnProperty('hereNow') && (data.categories[0].name.indexOf("Bar") > -1 || data.categories[0].name.indexOf("Casino") > -1 || data.categories[0].name.indexOf("Pub") > -1)){
+            marker = new google.maps.Marker({
+                map : map,
+                position : {
+                    lat : data.location.lat,
+                    lng : data.location.lng
+                },
+                icon : CONFIG.beerImageGray
+            });
+        }
+        else if(data.hasOwnProperty('description')){
+            marker = new google.maps.Marker({
+                map : map,
+                position : {
+                    lat : data.latitude,
+                    lng : data.longitude
+                },
+                icon : CONFIG.beerImageYellow
+            });
+        }
+        else {
+            return false;
+        }
+        NEIGBR.createInfoWindow(marker, data);
         return marker;
     };
 
     /**
-     * Gathering datas
+     * Gathering datas via jQuery Ajax method
+     * Function must return array of entries
      */
-    NEIGBR.getData = function(){
-        data = CONFIG.data;
-        return data;
+    NEIGBR.getJsonData = function(dataUrl){
+        // verify foursquare url
+        console.log(dataUrl);
+        jQuery.ajax({
+            url : dataUrl,
+            context : document.body,
+            dataType : 'json',
+            success : function(){
+                jQuery.getJSON(dataUrl, function (data) {
+                    // array of all entries is stored under response.venues
+                    return data;
+                });
+            },
+            error : function(err){
+                console.log('shit: ' + err);
+            }
+        })
+        .done(function(data){
+            // just check what data goes from the ajax if something goes wrong
+            // console.table(data);
+            NEIGBR.addMarkers(data.response.venues);
+        });
     };
 
     /**
@@ -133,7 +230,7 @@ var Neighbour = function(){
      */
     NEIGBR.init = function(){
         NEIGBR.createMap();
-        NEIGBR.addMarkers();
+        NEIGBR.getJsonData(FOURSQUARE.dataUrl);
     };
 
     return NEIGBR;
