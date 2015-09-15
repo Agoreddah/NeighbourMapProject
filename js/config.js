@@ -23,8 +23,8 @@ var Config = function(){
     this.MAPCANVAS_ID = 'map-canvas';
 
     // LatLng of Zilina
-    this.ZA_LAT = 49.22;
-    this.ZA_LNG = 18.74;
+    this.ZA_LAT = 49.2234;
+    this.ZA_LNG = 18.7394;
 
     // Icons
     this.iconFolder = 'images';

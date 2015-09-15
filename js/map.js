@@ -27,30 +27,16 @@ var Map = function(){
         var marker;
         // this statement can indicate if we use foursquare object structure or not
         // TODO Remove Foursquare dependency and create own object data structures
-        if( (data.categories[0].name.indexOf("Bar") > -1 || data.categories[0].name.indexOf("Restaurant") > -1 || data.categories[0].name.indexOf("Pub") > -1)){
-            marker = new google.maps.Marker({
-                map : googlemap,
-                position : {
-                    lat : data.location.lat,
-                    lng : data.location.lng
-                },
-                animation: google.maps.Animation.DROP,
-                icon : CONFIG.beerImageGray
-            });
-        }
-        else if(data.hasOwnProperty('User')){
-            marker = new google.maps.Marker({
-                map : googlemap,
-                position : {
-                    lat : data.User.latitude,
-                    lng : data.User.longitude
-                },
-                icon : CONFIG.beerImageYellow
-            });
-        }
-        else {
-            return false;
-        }
+        marker = new google.maps.Marker({
+            map : googlemap,
+            position : {
+                lat : data.location.lat,
+                lng : data.location.lng
+            },
+            animation: google.maps.Animation.DROP,
+            icon : CONFIG.beerImageGray
+        });
+
         this.createInfoWindow(googlemap, marker, data);
         return marker;
     };

@@ -50,8 +50,14 @@ var App = function(){
             return self.DATA();
         } else {
           return ko.utils.arrayFilter(self.DATA(), function (item) {
-                var place = item.name;
-                if(place.toLowerCase().lastIndexOf(filter.toLowerCase(), 0) === 0){
+                // remove Uppercase and diacritics from the item names and search string
+                var place = item.name,
+                    loweredPlace = place.toLowerCase(),
+                    loweredFilter = filter.toLowerCase(),
+                    rawPlace = self.removeDiacritics(loweredPlace),
+                    rawFilter = self.removeDiacritics(loweredFilter);
+
+                if(rawPlace.indexOf(rawFilter) > -1){
                     return item;
                 }
             });
@@ -74,7 +80,6 @@ var App = function(){
     self.PHOTOS.subscribe(function(newPhotos){
         var album = FOURSQUARE.parseAllPhotos(newPhotos);
         self.PHOTOS_ALBUM(album);
-        console.log(self.PHOTOS_ALBUM);
     });
 
     /**
@@ -159,7 +164,7 @@ var App = function(){
      */
     self.initMap = function(){
         GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);
-
+        self.savePosition(CONFIG.ZA_LAT, CONFIG.ZA_LNG);
         // TODO create functionality to parse user's position
         // navigator.geolocation.getCurrentPosition(self.parsePosition);
         self.getJSON(FOURSQUARE.dataUrl(49.22, 18.74));
@@ -227,10 +232,34 @@ var App = function(){
     };
 
     /**
+     * Helper function to remove diacritis
+     * It's useful during the search activity
+     */
+    self.removeDiacritics = function(str){
+        str = str.replace(new RegExp('č'), 'c');
+        str = str.replace(new RegExp('ď'), 'd');
+        str = str.replace(new RegExp('ť'), 't');
+        str = str.replace(new RegExp('ň'), 'n');
+        str = str.replace(new RegExp('ž'), 'z');
+        str = str.replace(new RegExp('š'), 's');
+        str = str.replace(new RegExp('[ľĺ]', 'g'), 'l');
+        str = str.replace(new RegExp('[áä]', 'g'), 'a');
+        str = str.replace(new RegExp('[éě]', 'g'), 'e');
+        str = str.replace(new RegExp('í'), 'i');
+        str = str.replace(new RegExp('[óô]', 'g'), 'o');
+        str = str.replace(new RegExp('ú'), 'u');
+        str = str.replace(new RegExp('ý'), 'y');
+        return str;
+    };
+
+    /**
      * Save position data to localStorage and to hidden inputs
      * @param Object 'User' with predefined latitude and longitude values
      */
-    self.savePosition = function(data){
+    self.savePosition = function(lat, lng){
+        var data = {};
+        data.latitude = lat;
+        data.longitude = lng;
         jQuery('#userLatitude').val(data.latitude);
         jQuery('#userLongitude').val(data.longitude);
         self.localStorageSet('User',data);
@@ -242,7 +271,8 @@ var App = function(){
      * if the value is occupied, show directly application-panel
      */
     self.showPage = function(){
-        if(!self.localStorageGet('User')){
+        var user = self.localStorageGet('User');
+        if(!user){
             self.logger('User key not found');
             self.fadeIn(document.getElementById(CONFIG.LOGIN_ID));
         }
