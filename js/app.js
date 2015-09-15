@@ -36,6 +36,28 @@ var App = function(){
     /** chosenPlace stores info about clicked place */
     self.chosenPlace = ko.observable();
 
+    /** search is actived in search place input field */
+    self.search = ko.observable('');
+
+    /**
+     * self.DATA is original object from JSON response
+     * this object is getting filtered when the self.search method is called
+     * We use arrayFilter to filter self.DATA by the given string stored in self.search()
+     */
+    self.filteredData = ko.computed(function () {
+        var filter = self.search();
+        if (!filter) {
+            return self.DATA();
+        } else {
+          return ko.utils.arrayFilter(self.DATA(), function (item) {
+                var place = item.name;
+                if(place.toLowerCase().lastIndexOf(filter.toLowerCase(), 0) === 0){
+                    return item;
+                }
+            });
+        }
+    });
+
 
     /**
      * When the DATA are update from given JSON response, each entry creates the map marker
@@ -46,6 +68,7 @@ var App = function(){
         for (i, len; i < len; ++i){
             MAP.createMarker(GOOGLEMAP, newDATA[i]);
         }
+        self.filteredData(newDATA);
     });
 
     self.PHOTOS.subscribe(function(newPhotos){

@@ -52,7 +52,8 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
                 <div class="row">
                     <div class="places three columns">
                         <h2 class="places-title">List of places</h2>
-                        <ul data-bind="foreach: DATA, visible: DATA().length > 0">
+                        <input type="search" data-bind="value: search, valueUpdate: 'keyup'" />
+                        <ul data-bind="foreach: filteredData">
                                 <li>
                                     <h5 data-bind="text: name, click: $root.goToPlace"></h5>
                                 </li>
