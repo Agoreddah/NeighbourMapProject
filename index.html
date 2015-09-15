@@ -30,23 +30,90 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 </head>
 <body>
 
+    <!-- Login page
+    ------------------>
+
+
+        <div class="page-wrapper">
+            <!-- login page panel -->
+            <div id="login" class="login-panel container hidden">
+                <div class="panel">
+                    <h1 class="lp-welcome">Welcome</h1>
+                    <h3 class="lp-subtitle">Looking for a pub?</h3>
+                    <button type="button" onclick="Application.initMap()" class="button-primary center">Explore Zilina</button>
+                </div>
+                <div class="authorize">
+                    <p>Independent project for udacity Front end developer nanodegree <br />2015 &amp; Tomas</p>
+                </div>
+            </div>
+
+            <!-- map container -->
+            <div id="application" class="container-max application-panel">
+                <div class="row">
+                    <div class="places three columns">
+                        <h2 class="places-title">List of places</h2>
+                        <ul data-bind="foreach: DATA, visible: DATA().length > 0">
+                                <li>
+                                    <h5 data-bind="text: name, click: $root.goToPlace"></h5>
+                                </li>
+                        </ul>
+                    </div>
+                    <div id="map-canvas" class="six columns"></div>
+
+                    <div class="content-wrapper three columns">
+                        <div class="place-info" data-bind="with: chosenPlace">
+                            <h2 class="content-title" data-bind="text: name"></h2>
+                            <p data-bind="text: location.address"></p>
+                            <p data-bind="text: contact.phone"></p>
+                        </div>
+                        <div class="place-gallery">
+                            <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
+                            	<li>
+                                   <img data-bind="attr : { src : $data }" alt="" />
+                            	</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- info window html data.  -->
+            <div id="markerSkelet" data-bind="width: DATA">
+                <h2 data-bind="text:name"></h2>
+                <p data-bind="click: $root.goToPlace">Click</p>
+            </div>
+
+        </div>
+
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
-    <div class="row">
-        <h2 class="twelve columns">Map project</h2>
-        <div id="map_canvas" class="twelve columns"></div>
-    </div>
-  </div>
+
+  <!-- hidden fields
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <input type="hidden" id="userLatitude" name="userLatitude" value="" />
+  <input type="hidden" id="userLongitude" name="userLongitude" value="" />
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEaeUgDHN2lqUyjZMn9CngDbhEIBfqOe8"></script>
-  <script src="js/vendors/jquery.ajax.min.js"></script>
+  <script src="js/vendors/jquery.min.js"></script>
+  <script src="js/vendors/animation/TweenMax.min.js"></script>
   <script src="js/vendors/knockout.min.js"></script>
+  <!--<script src="js/plugins.js"></script>-->
   <script src="js/main.min.js"></script>
   <script>
-    Neighbour.init();
+    var Application = new App();
+    ko.applyBindings(Application);
+
+    jQuery('document').ready(function(){
+        setTimeout(Application.showPage(), 3000);
+    });
+
+    function shit(){
+        var self = this;
+
+        self.tasks = ko.observableArray([]);
+    };
   </script>
 </body>
 </html>

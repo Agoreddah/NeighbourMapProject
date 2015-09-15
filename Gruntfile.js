@@ -15,7 +15,7 @@ module.exports = function(grunt){
                 unused : true
             },
 
-            files : ['js/main.js']
+            files : ['js/*.js']
 
         },
         htmlmin : {
@@ -42,14 +42,14 @@ module.exports = function(grunt){
         uglify : {
             buildAll : {
                 files : {
-                    'dist/js/main.min.js' : ['js/main.js'],
-                    'dist/js/vendors/jquery.ajax.min.js' : ['js/vendors/jquery*'],
+                    'dist/js/main.min.js' : ['js/config.js','js/foursquare.js','js/map.js','js/app.js'],
+                    'dist/js/vendors/jquery.min.js' : ['js/vendors/jquery*'],
                     'dist/js/vendors/knockout.min.js' : ['js/vendors/knockout.js']
                 }
             },
             buildSimple : {
                 files : {
-                    'dist/js/main.min.js' : ['js/main.js']
+                    'dist/js/main.min.js' : ['js/config.js','js/foursquare.js','js/map.js','js/app.js']
                 }
             }
         },
@@ -59,7 +59,9 @@ module.exports = function(grunt){
                     // images
                     {expand : true, src : ['images/*'], dest : 'dist'},
                     // fonts
-                    {expand : true, src : ['fonts/*'], dest : 'dist'}
+                    {expand : true, src : ['fonts/*'], dest : 'dist'},
+                    // scripts
+                    {expand : true, src : ['js/vendors/animation/*'], dest : 'dist'}
                 ]
             }
         }

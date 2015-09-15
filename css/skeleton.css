@@ -29,11 +29,17 @@
 /* Fonts
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 @font-face {
+    font-family: 'Raleway Extra Bold';
+    src: url('../fonts/raleway-extrabold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'Raleway Bold';
     src: url('../fonts/raleway-bold-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
 
 @font-face {
@@ -41,11 +47,10 @@
     src: url('../fonts/raleway-light-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
 
 @font-face {
-    font-family: 'Raleway';
+    font-family: 'Raleway Regular';
     src: url('../fonts/raleway-regular-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
@@ -53,16 +58,16 @@
 }
 
 @font-face {
-    font-family: 'Raleway Semibold';
+    font-family: 'Raleway Semi Bold';
     src: url('../fonts/raleway-semibold-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
 
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.container {
+.container,
+.container-max {
   position: relative;
   width: 100%;
   max-width: 960px;
@@ -217,7 +222,6 @@ input[type="button"] {
   text-decoration: none;
   white-space: nowrap;
   background-color: transparent;
-  border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box; }
@@ -437,8 +441,104 @@ there.
 
 /* Custom code
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-#map_canvas{
+#map-canvas{
 	height:600px;
+}
+
+body {
+	background: #000000;
+	font-family: 'Raleway Regular';
+}
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Raleway Bold';
+}
+
+.container-max{
+	width:90%;
+	max-width:90%;
+}
+
+.panel{
+	width: 550px;
+    max-width: 90s%;
+    margin: 0 auto;
+	background:#fdf9f0;
+	padding: 2.4rem 5rem;
+	overflow:hidden;
+    box-sizing: border-box;
+}
+
+.hidden{
+	display:none;
+	opacity:0;
+}
+.right{
+	float:right;
+}
+
+.center{
+	display:block;
+	position:relative;
+	margin:0 auto;
+}
+
+.button-green{
+	color:#fff;
+	background:#6ac063;
+	border:1px solid #6AC063;
+}
+.button-green:hover,
+.button-green:focus{
+	color:#fff;
+	background:#50A749;
+	border:1px solid #50A749;
+}
+
+/* login page */
+.page-wrapper{
+	position: absolute;
+	width:100%;
+	height:100%;
+	background: url('../images/login-bg.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.login-panel,
+.application-panel{
+	top:17%;
+}
+.lp-welcome {
+	font-family:'Raleway Extra Bold';
+	text-transform:uppercase;
+	text-align:center;
+	color:#1d415a;
+}
+.lp-subtitle{
+	font-family:'Raleway Regular';
+	text-align:center;
+	color:#1D415A;
+	font-size: 2.2em;
+    letter-spacing: 0.025em;
+    margin-bottom: 1em;
+}
+
+.authorize{
+	margin-top:1.5em;
+	font-size:1em;
+	color:#fff;
+	text-align:center;
+}
+
+/* application */
+.application-panel{
+	background:#fdf9f0;
+	-moz-transform: scale(1);
+	-webkit-transform: scale(1);
+	-o-transform: scale(1);
+	-ms-transform: scale(1);
+	transform: scale(1);
 }
 
 
