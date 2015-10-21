@@ -1,4 +1,6 @@
 /*
+ * DEPRECATED, old file 
+ *
  * Project: Neighbour map
  * Course: Udacity Front-end nanodegree
  * Author: Tomas Chudjak

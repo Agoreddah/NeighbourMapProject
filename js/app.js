@@ -116,6 +116,7 @@ var App = function(){
      * @param url what returns JSON object
      */
     self.getJSON = function(dataUrl){
+    	self.logger(dataUrl);
         jQuery.getJSON(dataUrl, function(data){
             var places, photos;
 

@@ -18,6 +18,13 @@ module.exports = function(grunt){
             files : ['js/*.js']
 
         },
+        stylus : {
+        	compile : {
+        		files : {
+        			'css/pifko.css' : 'css/pifko.styl'
+        		}
+        	}
+        },
         htmlmin : {
             dist : {
                 //https://github.com/kangax/html-minifier#options-quick-reference
@@ -35,7 +42,7 @@ module.exports = function(grunt){
         cssmin : {
             target : {
                 files : {
-                    'dist/css/skeleton.min.css' : 'css/skeleton.css'
+                    'dist/css/pifko.min.css' : ['css/skeleton.css','css/pifko.css']
                 }
             }
         },
@@ -70,12 +77,13 @@ module.exports = function(grunt){
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default',['jshint','htmlmin','cssmin','uglify:buildAll','copy']);
-    grunt.registerTask('build-project', ['htmlmin','cssmin','uglify:buildAll','copy']);
-    grunt.registerTask('build', ['htmlmin','cssmin','uglify:buildSimple']);
+    grunt.registerTask('default',['jshint','htmlmin','stylus','cssmin','uglify:buildAll','copy']);
+    grunt.registerTask('build-project', ['htmlmin','stylus','cssmin','uglify:buildAll','copy']);
+    grunt.registerTask('build', ['htmlmin','stylus','cssmin','uglify:buildSimple']);
     grunt.registerTask('test',['jshint']);
 };

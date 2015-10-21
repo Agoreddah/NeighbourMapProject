@@ -8,7 +8,7 @@
  * Version: 1.0.0
  */
 
-/* globals Config, google, jQuery, Application */
+/* globals Config, google, Application */
 /* exported Map, google */
 
 var Map = function(){
