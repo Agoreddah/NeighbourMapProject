@@ -8,7 +8,7 @@
  * Version: 1.0.0
  */
 
-/* globals document, console, localStorage, google, ko, Config, Map, Foursquare, TweenLite, Power1, jQuery */
+/* globals document, console, localStorage, google, ko, Config, Navigation, Map, Foursquare, TweenLite, Power1, jQuery, Sammy */
 /* exported App */
 
 var App = function(){
@@ -18,8 +18,10 @@ var App = function(){
     // Simple dependency injection
     var self = this,
         CONFIG = new Config(),
+        NAV = new Navigation(),
         FOURSQUARE = new Foursquare(),
         MAP = new Map(),
+        ROUTING = new Sammy(),
         GOOGLEMAP;
 
     ///////////////////////////////
@@ -32,6 +34,9 @@ var App = function(){
     self.DATA = ko.observableArray([]);
     self.PHOTOS = ko.observableArray([]);
     self.PHOTOS_ALBUM = ko.observableArray([]);
+    
+    /** PAGER stores current routing value */
+    self.ROUTE = ko.observable('login');
 
     /** chosenPlace stores info about clicked place */
     self.chosenPlace = ko.observable();
@@ -93,6 +98,25 @@ var App = function(){
         self.logger('Photos url: '+photosUrl);
         self.getJSON(photosUrl);
     };
+    
+    ////////////////////////////////////
+    //                           	  //
+    //   Sammy js routing functions   //
+    //                           	  //
+    ////////////////////////////////////
+    
+    self.goToPage = function(page){
+    	location.hash = page;
+    };
+    
+	Sammy(function() {
+        this.get('#login', function(){
+        	self.ROUTE(NAV.LOGIN_PAGE);
+        });
+        this.get('#application', function(){
+        	self.ROUTE(NAV.APP_PAGE);
+        });
+    }).run('#login');
 
     ////////////////////////////////
     //                            //
@@ -142,14 +166,14 @@ var App = function(){
      * Animation functions
      * Uses tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
      */
-    self.jumpIn = function(selector, position){
+    self.dropPointer = function(selector, position){
     	self.logger('selector is jumping down ' + selector);
     	var pos = position;
     	var animation = new TimelineLite();
 	    animation
 	    	.to(selector, 0.45, {top:pos})
 	    	.to(selector, 0.15, {y:-15})
-	    	.to(selector,0.25,{y:0});
+	    	.to(selector,0.25, {y:0});
     };
     
     self.fadeOut = function(selector){
@@ -172,17 +196,18 @@ var App = function(){
 
     /**
      * This function initializes page
+     * Save App page to the routing scope
      * Creates GOOGLEMAP object
      * Saves position to local storage
      * Requests foursquare json object for current lat lng parameters
      */
     self.initMap = function(){
-        GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);
+        self.goToPage(NAV.APP_PAGE);
         self.savePosition(CONFIG.ZA_LAT, CONFIG.ZA_LNG);
         // TODO create functionality to parse user's position
         // navigator.geolocation.getCurrentPosition(self.parsePosition);
         self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));
-        //self.fadeOut(document.getElementById(CONFIG.LOGIN_ID));
+        GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);
     };
 
     /**
@@ -288,12 +313,10 @@ var App = function(){
         var user = self.localStorageGet('User');
         if(!user){
             self.logger('User key not found');
-            self.fadeIn(document.getElementById(CONFIG.LOGIN_ID));
         }
         else{
             self.logger('User key founded');
-            self.initMap();
-            //self.fadeIn(document.getElementById(CONFIG.APP_ID));
+            //self.initMap();
         }
     };
 

@@ -5,7 +5,10 @@
 lobster-regular = Lobster, cursive
 
 mapimage = url(../images/zilinamap-low.jpg) no-repeat top center fixed
-pointericon = url(../images/pointer-icon.png) no-repeat
+beericon = url(../images/beer-icon.png) no-repeat
+coffeeicon = url(../images/coffee-icon.png) no-repeat
+drinkicon = url(../images/drink-icon.png) no-repeat
+pointershadow = url(../images/pointer-shadow.png) no-repeat
 
 cyan = #61e7ff
 darkcyan = #05505d
@@ -62,25 +65,51 @@ body
 	height 70vh
 	background mapimage
 	background-size cover
-  	
-.pointer-icon
-	width 100px
-	height 110px
-	display block
-	background pointericon
-	background-size 100px 110px
+  		
+.pointer
 	position absolute
 	top -160px
 	margin -55px 0 0 -50px
+	
+.pointer-wrapper
+	position relative		
+  		
+.pointer-icon,
+.pointer-shadow
+	width 100px
+	height 110px
+	display block
+	position absolute
+	z-index 2
+
+.pointer1
+	left 50%
 
 .pointer-icon1
-	left 50%
+	background beericon
+	background-size 100px 110px
+	
+.pointer2
+	left 25%	
 	
 .pointer-icon2
-	left 25%
+	background coffeeicon
+	background-size 100px 110px
+
+.pointer3
+	left 75%
 
 .pointer-icon3
-	left 75%
+	background drinkicon
+	background-size 100px 110px
+
+.pointer-shadow
+	width 140px
+	height 160px
+	background pointershadow
+	background-size 110px 120px
+	position absolute
+	z-index 1
 
 .logo
 	position absolute
@@ -89,7 +118,7 @@ body
 	padding 35px 0 0
 	text-align center
 	color darkblue
-	z-index 2
+	z-index 3
 	
 	.fl
 		font 48px lobster-regular

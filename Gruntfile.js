@@ -49,14 +49,15 @@ module.exports = function(grunt){
         uglify : {
             buildAll : {
                 files : {
-                    'dist/js/main.min.js' : ['js/config.js','js/foursquare.js','js/map.js','js/app.js'],
+                    'dist/js/main.min.js' : ['js/config.js','js/navigation.js','js/foursquare.js','js/map.js','js/app.js'],
                     'dist/js/vendors/jquery.min.js' : ['js/vendors/jquery*'],
-                    'dist/js/vendors/knockout.min.js' : ['js/vendors/knockout.js']
+                    'dist/js/vendors/knockout.min.js' : ['js/vendors/knockout.js'],
+                    'dist/js/vendors/sammy.min.js' : ['js/vendors/sammy.js']
                 }
             },
             buildSimple : {
                 files : {
-                    'dist/js/main.min.js' : ['js/config.js','js/foursquare.js','js/map.js','js/app.js']
+                    'dist/js/main.min.js' : ['js/config.js','js/navigation.js','js/foursquare.js','js/map.js','js/app.js']
                 }
             }
         },

@@ -32,101 +32,131 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 </head>
 <body>
 
-    <!-- Login page
-    ------------------>
+    <!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
-
-        <div class="page-wrapper">
-            <!-- login page panel -->
-            <div id="login">
-            	<div class="map-image">
-            		<h1 class="logo"><span class="fl">P</span>ifko</h1>
-            		<div class="pointer-icon pointer-icon1">
-            			<div class="pointer-shadow"></div>
-            		</div>
-            		<div class="pointer-icon pointer-icon2"></div>
-            		<div class="pointer-icon pointer-icon3"></div>
-            	</div>
-                <div class="container">
-                	<div class="intro-text">
-                    	<button type="button" onclick="Application.initMap()" class="button button-cyan centered mtop-30">Explore Zilina</button>
-                    	<p>Looking for some good beer<br />place around?</p>	
-	               	</div>
-                </div>
-            </div>
-
-            <!-- map container -->
-            <div id="application" class="container-max application-panel">
-                <div class="row">
-                    <div class="places three columns">
-                        <h2 class="places-title">List of places</h2>
-                        <input type="search" placeholder="Search places" data-bind="value: search, valueUpdate: 'keyup'" />
-                        <ul data-bind="foreach: filteredData">
-                                <li>
-                                    <h5 data-bind="text: name, click: $root.goToPlace"></h5>
-                                </li>
-                        </ul>
+    <div class="page-wrapper" data-bind="template: {name : ROUTE}">
+    </div>
+    
+    <!-- Login page -->
+    <script type="text/template" id="login">
+        <div id="login-page">
+            <div class="map-image">
+                <h1 class="logo"><span class="fl">P</span>ifko</h1>
+                <div class="pointer pointer1">
+                    <div class="pointer-wrapper">
+                        <div class="pointer-icon pointer-icon1"></div>
+                        <div class="pointer-shadow shadow1"></div>
                     </div>
-                    <div id="map-canvas" class="six columns"></div>
-
-                    <div class="content-wrapper three columns">
-                        <div class="place-info" data-bind="with: chosenPlace">
-                            <h2 class="content-title" data-bind="text: name"></h2>
-                            <p data-bind="text: location.address"></p>
-                            <p data-bind="text: contact.phone"></p>
-                        </div>
-                        <div class="place-gallery">
-                            <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
-                            	<li>
-                                   <img data-bind="attr : { src : $data }" alt="" />
-                            	</li>
-                            </ul>
-                        </div>
+                </div>
+                <div class="pointer pointer2">
+                    <div class="pointer-wrapper">
+                        <div class="pointer-icon pointer-icon2"></div>
+                        <div class="pointer-shadow shadow1"></div>
+                    </div>
+                </div>
+                <div class="pointer pointer3">
+                    <div class="pointer-wrapper">
+                        <div class="pointer-icon pointer-icon3"></div>
+                        <div class="pointer-shadow shadow1"></div>
                     </div>
                 </div>
             </div>
-
-            <!-- info window html data.  -->
-            <div id="markerSkelet" data-bind="width: DATA">
-                <h2 data-bind="text:name"></h2>
-                <p data-bind="click: $root.goToPlace">Click</p>
+            <div class="container">
+                <div class="intro-text">
+                    <button type="button" onclick="Application.initMap()" class="button button-cyan centered mtop-30">Explore Zilina</button>
+                    <p>Looking for some good beer
+                        <br />place around?</p>
+                </div>
             </div>
-
         </div>
 
-  <!-- Primary Page Layout
+    </script>
+    <!-- #login -->
+
+    <!-- application page -->
+    <script type="text/template" id="application">
+        <div id="application-page" class="container-max application-panel">
+            <div class="row">
+                <div class="places three columns">
+                    <h2 class="places-title">List of places</h2>
+                    <input type="search" placeholder="Search places" data-bind="value: search, valueUpdate: 'keyup'" />
+                    <ul data-bind="foreach: filteredData">
+                        <li>
+                            <h5 data-bind="text: name, click: $root.goToPlace"></h5>
+                        </li>
+                    </ul>
+                </div>
+                <div id="map-canvas" class="six columns"></div>
+
+                <div class="content-wrapper three columns">
+                    <div class="place-info" data-bind="with: chosenPlace">
+                        <h2 class="content-title" data-bind="text: name"></h2>
+                        <p data-bind="text: location.address"></p>
+                        <p data-bind="text: contact.phone"></p>
+                    </div>
+                    <div class="place-gallery">
+                        <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
+                            <li>
+                                <img data-bind="attr : { src : $data }" alt="" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- #application -->
+
+    <!-- info window html data.  
+    <div id="markerSkelet" data-bind="width: DATA">
+        <h2 data-bind="text:name"></h2>
+        <p data-bind="click: $root.goToPlace">Click</p>
+    </div>
+-->
+    <!-- hidden fields
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <input type="hidden" id="userLatitude" name="userLatitude" value="" />
+    <input type="hidden" id="userLongitude" name="userLongitude" value="" />
 
-  <!-- hidden fields
+    <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <input type="hidden" id="userLatitude" name="userLatitude" value="" />
-  <input type="hidden" id="userLongitude" name="userLongitude" value="" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEaeUgDHN2lqUyjZMn9CngDbhEIBfqOe8"></script>
+    <script src="js/vendors/jquery.min.js"></script>
+    <script src="js/vendors/animation/TweenMax.min.js"></script>
+    <script src="js/vendors/sammy.min.js"></script>
+    <script src="js/vendors/knockout.min.js"></script>
+    <script src="js/main.min.js"></script>
+    <script>
+        var Application = new App();
+        ko.applyBindings(Application);
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEaeUgDHN2lqUyjZMn9CngDbhEIBfqOe8"></script>
-  <script src="js/vendors/jquery.min.js"></script>
-  <script src="js/vendors/animation/TweenMax.min.js"></script>
-  <script src="js/vendors/knockout.min.js"></script>
-  <!--<script src="js/plugins.js"></script>-->
-  <script src="js/main.min.js"></script>
-  <script>
-    var Application = new App();
-    ko.applyBindings(Application);
+        jQuery('document').ready(function() {
+            Application.showPage();
+        });
 
-    jQuery('document').ready(function(){
-        //setTimeout( function() { Application.showPage(); }, 3000);
-        Application.showPage();
-        setTimeout( function() { Application.jumpIn('.pointer-icon1', "50%"); }, 1000);
-        setTimeout( function() { Application.jumpIn('.pointer-icon2', "27%"); }, 1500);
-        setTimeout( function() { Application.jumpIn('.pointer-icon3', "17%"); }, 2000);
-    });
-
-    function shit(){
-        var self = this;
-
-        self.tasks = ko.observableArray([]);
-    };
-  </script>
+        // run the pointers animation when the page is fully loaded and prepared
+        /*document.onreadystatechange = function() {
+            if (document.readyState == "complete") {
+                setTimeout(function() {
+                    Application.dropPointer('.pointer1', "50%");
+                }, 1000);
+                setTimeout(function() {
+                    Application.dropPointer('.pointer2', "27%");
+                }, 1500);
+                setTimeout(function() {
+                    Application.dropPointer('.pointer3', "17%");
+                }, 2000);
+                setTimeout(function() {
+                    TweenLite.to('.pointer-shadow', 0.35, {
+                        x: 18,
+                        y: 8,
+                        skewX: -46
+                    });
+                }, 2800);
+            }
+        };*/
+    </script>
 </body>
+
 </html>
