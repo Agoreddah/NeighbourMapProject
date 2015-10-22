@@ -21,6 +21,8 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/pifko.min.css">
 
   <!-- Favicon
@@ -36,14 +38,20 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 
         <div class="page-wrapper">
             <!-- login page panel -->
-            <div id="login" class="login-panel container hidden">
-                <div class="panel">
-                    <h1 class="lp-welcome">Welcome</h1>
-                    <h3 class="lp-subtitle">Looking for a pub?</h3>
-                    <button type="button" onclick="Application.initMap()" class="button-primary center">Explore Zilina</button>
-                </div>
-                <div class="authorize">
-                    <p>Independent project for udacity Front end developer nanodegree <br />2015 &amp; Tomas</p>
+            <div id="login">
+            	<div class="map-image">
+            		<h1 class="logo"><span class="fl">P</span>ifko</h1>
+            		<div class="pointer-icon pointer-icon1">
+            			<div class="pointer-shadow"></div>
+            		</div>
+            		<div class="pointer-icon pointer-icon2"></div>
+            		<div class="pointer-icon pointer-icon3"></div>
+            	</div>
+                <div class="container">
+                	<div class="intro-text">
+                    	<button type="button" onclick="Application.initMap()" class="button button-cyan centered mtop-30">Explore Zilina</button>
+                    	<p>Looking for some good beer<br />place around?</p>	
+	               	</div>
                 </div>
             </div>
 
@@ -107,7 +115,11 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
     ko.applyBindings(Application);
 
     jQuery('document').ready(function(){
-        setTimeout(Application.showPage(), 3000);
+        //setTimeout( function() { Application.showPage(); }, 3000);
+        Application.showPage();
+        setTimeout( function() { Application.jumpIn('.pointer-icon1', "50%"); }, 1000);
+        setTimeout( function() { Application.jumpIn('.pointer-icon2', "27%"); }, 1500);
+        setTimeout( function() { Application.jumpIn('.pointer-icon3', "17%"); }, 2000);
     });
 
     function shit(){

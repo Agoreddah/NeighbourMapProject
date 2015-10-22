@@ -1,0 +1,1 @@
+http://maps.google.com/maps/api/staticmap?sensor=false&size=1024x1024&scale=2&center=zilina&zoom=17&style=feature:all|element:labels|visibility:off

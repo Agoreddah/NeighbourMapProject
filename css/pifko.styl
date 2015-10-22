@@ -1,9 +1,106 @@
 /* https://learnboost.github.io/stylus/ */
+
+/* Basic variables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+lobster-regular = Lobster, cursive
+
+mapimage = url(../images/zilinamap-low.jpg) no-repeat top center fixed
+pointericon = url(../images/pointer-icon.png) no-repeat
+
+cyan = #61e7ff
+darkcyan = #05505d
+darkblue = #105e6c
+
+radius = 35px
+
+noto-regular(size)
+	font 400 size Noto Sans, sans-serif
+	
+noto-bold(size)
+	font 700 size Noto Sans, sans-serif
+
+border-radius()
+	-webkit-border-radius radius
+	-moz-border-radius radius
+	border-radius radius
+
 /* Custom code
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+body
+	noto-regular(15px)
+	line-height 21px
+	
+
+.cyan
+	color cyan
+
+.cyan-bg
+	background cyan
+
+.centered
+	margin 0 auto
+	position relative
+	display block
+	
+.button
+	noto-bold(15px)
+	width 270px
+	height 49px
+	line-height 49px
+	border-bottom 1px solid transparent
+	border-radius()
+
+.button.button-cyan
+	color darkcyan
+	background cyan
+	border none
+	
 #map-canvas
 	height 600px
+	
+.map-image
+	height 70vh
+	background mapimage
+	background-size cover
+  	
+.pointer-icon
+	width 100px
+	height 110px
+	display block
+	background pointericon
+	background-size 100px 110px
+	position absolute
+	top -160px
+	margin -55px 0 0 -50px
 
+.pointer-icon1
+	left 50%
+	
+.pointer-icon2
+	left 25%
+
+.pointer-icon3
+	left 75%
+
+.logo
+	position absolute
+	width 100%
+	font 32px lobster-regular
+	padding 35px 0 0
+	text-align center
+	color darkblue
+	z-index 2
+	
+	.fl
+		font 48px lobster-regular
+
+.intro-text
+	height 30vh
+	display block
+	text-align center
+	
+	.button
+		margin 5vh auto 4vh
 
 /* Larger than mobile */
 @media (min-width: 400px) {}

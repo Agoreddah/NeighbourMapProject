@@ -142,6 +142,16 @@ var App = function(){
      * Animation functions
      * Uses tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
      */
+    self.jumpIn = function(selector, position){
+    	self.logger('selector is jumping down ' + selector);
+    	var pos = position;
+    	var animation = new TimelineLite();
+	    animation
+	    	.to(selector, 0.45, {top:pos})
+	    	.to(selector, 0.15, {y:-15})
+	    	.to(selector,0.25,{y:0});
+    };
+    
     self.fadeOut = function(selector){
         self.logger('selector fades out: '+ selector);
         TweenLite.to(
@@ -162,14 +172,17 @@ var App = function(){
 
     /**
      * This function initializes page
+     * Creates GOOGLEMAP object
+     * Saves position to local storage
+     * Requests foursquare json object for current lat lng parameters
      */
     self.initMap = function(){
         GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);
         self.savePosition(CONFIG.ZA_LAT, CONFIG.ZA_LNG);
         // TODO create functionality to parse user's position
         // navigator.geolocation.getCurrentPosition(self.parsePosition);
-        self.getJSON(FOURSQUARE.dataUrl(49.22, 18.74));
-        self.fadeOut(document.getElementById(CONFIG.LOGIN_ID));
+        self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));
+        //self.fadeOut(document.getElementById(CONFIG.LOGIN_ID));
     };
 
     /**
@@ -233,7 +246,7 @@ var App = function(){
     };
 
     /**
-     * Helper function to remove diacritis
+     * Helper function to remove slovak diacritis
      * It's useful during the search activity
      */
     self.removeDiacritics = function(str){
