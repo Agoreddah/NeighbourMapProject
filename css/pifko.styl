@@ -4,12 +4,13 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 lobster-regular = Lobster, cursive
 
-mapimage = url(../images/zilinamap-low.jpg) no-repeat top center fixed
+mapimage = url(../images/zilinamap-normal.jpg) no-repeat top center fixed
 beericon = url(../images/beer-icon.png) no-repeat
 coffeeicon = url(../images/coffee-icon.png) no-repeat
 drinkicon = url(../images/drink-icon.png) no-repeat
 pointershadow = url(../images/pointer-shadow.png) no-repeat
 
+black = #2d2d2f
 cyan = #61e7ff
 darkcyan = #05505d
 darkblue = #105e6c
@@ -32,7 +33,21 @@ border-radius()
 body
 	noto-regular(15px)
 	line-height 21px
+	color black
 	
+.hidden
+	display none !important
+	visibility hidden !important
+	opacity 0 !important
+
+.tleft
+	text-align left
+
+.tcenter
+	text-align center
+
+.tright
+	text-align right
 
 .cyan
 	color cyan
@@ -57,15 +72,12 @@ body
 	color darkcyan
 	background cyan
 	border none
-	
-#map-canvas
-	height 600px
-	
+
 .map-image
 	height 70vh
 	background mapimage
 	background-size cover
-  		
+		
 .pointer
 	position absolute
 	top -160px
@@ -130,6 +142,41 @@ body
 	
 	.button
 		margin 5vh auto 4vh
+
+#map-canvas
+	height 90vh
+	
+.navigation
+	height 10vh
+	line-height 10vh
+	
+	ul
+		list-style-type none
+		margin 0
+		display flex
+		justify-content space-between
+		
+		li
+			margin 0
+			flex-direction column
+			text-transform capitalize
+			
+		li.selected > *
+			color cyan
+
+/* Google maps fix
+------------------------------------ */
+a[href^="http://maps.google.com/maps"]
+a[href^="https://maps.google.com/maps"]
+	display none !important
+	
+.gmnoprint
+.gmnoprint gm-style-cc
+.gm-style-cc
+	display none
+
+.gmnoprint div
+	background none !important
 
 /* Larger than mobile */
 @media (min-width: 400px) {}

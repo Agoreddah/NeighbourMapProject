@@ -8,6 +8,8 @@
  *
  */
 
+/* exported Navigation */
+
 var Navigation = function(){
 	
 	"use strict";
@@ -15,5 +17,9 @@ var Navigation = function(){
 	this.LOGIN_PAGE = 'login';
 	this.MAIN_PAGE = 'main';
 	this.APP_PAGE = 'application';
+	
+	this.MENU_SUBPAGE = 'menu';
+	this.MAP_SUBPAGE = 'map';
+	this.SEARCH_SUBPAGE = 'search';
 	
 };

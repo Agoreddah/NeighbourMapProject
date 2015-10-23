@@ -4,11 +4,15 @@
  * Project: Neighbour map
  * Course: Udacity Front-end nanodegree
  * Author: Tomas Chudjak
- * Created: 10.9.2015
  * Version: 1.0.0
+ * 
+ * Contains:
+ * 	- Knockout js functions and observables
+ *  - App specific functions
+ *  - Sammy js routing functions
  */
 
-/* globals document, console, localStorage, google, ko, Config, Navigation, Map, Foursquare, TweenLite, Power1, jQuery, Sammy */
+/* globals document, console, localStorage, location, google, ko, Config, Navigation, Map, Foursquare, TweenLite, TimelineLite, Power1, jQuery, Sammy */
 /* exported App */
 
 var App = function(){
@@ -21,14 +25,13 @@ var App = function(){
         NAV = new Navigation(),
         FOURSQUARE = new Foursquare(),
         MAP = new Map(),
-        ROUTING = new Sammy(),
         GOOGLEMAP;
 
-    ///////////////////////////////
-    //                           //
-    //   Knockout js functions   //
-    //                           //
-    ///////////////////////////////
+    ///////////////////////////////////////////////
+    //                           				 //
+    //   Knockout js functions and observables   //
+    //                                           //
+    ///////////////////////////////////////////////
 
     /** DATA contains returned JSON object from Foursquare */
     self.DATA = ko.observableArray([]);
@@ -37,12 +40,34 @@ var App = function(){
     
     /** PAGER stores current routing value */
     self.ROUTE = ko.observable('login');
+    
+    /** Information about subpages, in this moment they are more like components */
+    self.SUBPAGES = [NAV.MENU_SUBPAGE, NAV.MAP_SUBPAGE, NAV.SEARCH_SUBPAGE];
+    self.SUBPAGE = ko.observable(NAV.MAP_SUBPAGE);
 
     /** chosenPlace stores info about clicked place */
     self.chosenPlace = ko.observable();
 
     /** search is actived in search place input field */
     self.search = ko.observable('');
+    
+    /** custom binding to invoke google map after map template is rendered
+     *  there have been issues to invoke google maps:
+     *  #map-canvas dom node must be present before google scripts are called
+     *  Solution is to add attribute data-bind='map' to #map-canvas node  */
+    ko.bindingHandlers.map = {
+    	init: function () {
+    		self.initMap();
+    	}
+    };
+    
+    /** similar solution to the pointers animation at the login page,
+     *  when the login page is ready, data-bind will trigger pointersAnimation function */
+    ko.bindingHandlers.pointers = {
+    	init: function(){
+    		self.pointersAnimation();
+    	}
+    };
 
     /**
      * self.DATA is original object from JSON response
@@ -99,24 +124,20 @@ var App = function(){
         self.getJSON(photosUrl);
     };
     
-    ////////////////////////////////////
-    //                           	  //
-    //   Sammy js routing functions   //
-    //                           	  //
-    ////////////////////////////////////
-    
-    self.goToPage = function(page){
+	/**
+	 * Function used by the Sammy js to change location has value 
+	 */
+	self.goToPage = function(page){
     	location.hash = page;
     };
     
-	Sammy(function() {
-        this.get('#login', function(){
-        	self.ROUTE(NAV.LOGIN_PAGE);
-        });
-        this.get('#application', function(){
-        	self.ROUTE(NAV.APP_PAGE);
-        });
-    }).run('#login');
+    /**
+     * Subpages are not handled by the Sammy js (maybe in future)
+     * At this moment, I only need to save some info about currently used subpage
+     */
+    self.gotToSubpage = function(subpage){
+    	self.SUBPAGE(subpage);
+    };
 
     ////////////////////////////////
     //                            //
@@ -176,6 +197,25 @@ var App = function(){
 	    	.to(selector,0.25, {y:0});
     };
     
+    self.pointersAnimation = function(){
+    	setTimeout(function() {
+			Application.dropPointer('.pointer1', "50%");
+		}, 1000);
+		setTimeout(function() {
+			Application.dropPointer('.pointer2', "27%");
+		}, 1500);
+		setTimeout(function() {
+			Application.dropPointer('.pointer3', "17%");
+		}, 2000);
+		setTimeout(function() {
+			TweenLite.to('.pointer-shadow', 0.35, {
+				x: 18,
+				y: 8,
+				skewX: -46
+			});
+		}, 2800);
+    };
+    
     self.fadeOut = function(selector){
         self.logger('selector fades out: '+ selector);
         TweenLite.to(
@@ -202,7 +242,7 @@ var App = function(){
      * Requests foursquare json object for current lat lng parameters
      */
     self.initMap = function(){
-        self.goToPage(NAV.APP_PAGE);
+        // self.goToPage(NAV.APP_PAGE);
         self.savePosition(CONFIG.ZA_LAT, CONFIG.ZA_LNG);
         // TODO create functionality to parse user's position
         // navigator.geolocation.getCurrentPosition(self.parsePosition);
@@ -326,5 +366,20 @@ var App = function(){
     self.test = function(){
         self.logger('App script works');
     };
+    
+     ////////////////////////////////////
+    //                           	  //
+    //   Sammy js routing functions   //
+    //                           	  //
+    ////////////////////////////////////
+    
+	new Sammy(function() {
+        this.get('#login', function(){
+        	self.ROUTE(NAV.LOGIN_PAGE);
+        });
+        this.get('#application', function(){
+        	self.ROUTE(NAV.APP_PAGE);
+        });
+    }).run('#login');
 
 };
