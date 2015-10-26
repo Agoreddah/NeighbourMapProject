@@ -64,7 +64,7 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
             </div>
             <div class="container" data-bind="pointers">
                 <div class="intro-text">
-                    <button type="button" onclick="Application.goToPage('application')" class="button button-cyan centered mtop-30">Explore Zilina</button>
+                    <button type="button" data-bind="click : initApplication" class="button button-cyan centered mtop-30">Explore Zilina</button>
                     <p>Looking for some good beer
                         <br />place around?</p>
                 </div>
@@ -78,7 +78,17 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
     <script type="text/template" id="application">
         <div id="application-page" class="container-max">
             <div class="row">
-                <div class="places three columns hidden">
+            	
+            	<!-- menu -->
+            	<div id="menu" class="menu sidebar three columns">
+            		<h1 class="menu-logo"><span class="fl">P</span>ifko</h1>
+            		<p>Project created for Udacity’s front-end developer nanodegree course</p>
+            		<p>Tomas Chudjak &copy; 2015</p>
+            		<p><a href="" data-bind="click : logout"><i class="icon-export"></i>logout</a></p>
+            	</div>
+            	
+            	<!-- search -->
+                <div id="search" class="places three columns hidden">
                     <h2 class="places-title">List of places</h2>
                     <input type="search" placeholder="Search places" data-bind="value: search, valueUpdate: 'keyup'" />
                     <ul data-bind="foreach: filteredData">
@@ -87,8 +97,11 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
                         </li>
                     </ul>
                 </div>
+                
+                <!-- map -->
                 <div id="map-canvas" class="twelve columns" data-bind="map"></div>
 
+				<!-- single place -->
                 <div class="content-wrapper three columns hidden">
                     <div class="place-info" data-bind="with: chosenPlace">
                         <h2 class="content-title" data-bind="text: name"></h2>
@@ -108,9 +121,11 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
             <!-- navigation -->
             <div id="nav" class="navigation container">
             	<ul data-bind="foreach: SUBPAGES">
-            		<li data-bind="css: { selected: $data == $root.SUBPAGE()}">
+            		<li data-bind="css : { selected: $data == $root.SUBPAGE()}">
+            			<a href="" data-bind="click : Application.toggleSidebar">
             			<i data-bind="attr : {'class' : 'icon-'+$data}"></i>
             			<span class="nav-text" data-bind="text: $data"></span>
+            			</a>
             		</li>
             	</ul>
             </div>
@@ -142,7 +157,7 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
         ko.applyBindings(Application);
 
         jQuery('document').ready(function() {
-            Application.showPage();
+            //Application.showPage();
         });
 
         // run the pointers animation when the page is fully loaded and prepared

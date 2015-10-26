@@ -65,7 +65,7 @@ module.exports = function(grunt){
             main : {
                 files : [
                     // images
-                    {expand : true, src : ['images/*'], dest : 'dist'},
+                    {expand : true, src : ['images/**'], dest : 'dist'},
                     // fonts
                     {expand : true, src : ['fonts/*'], dest : 'dist'},
                     // scripts

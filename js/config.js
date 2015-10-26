@@ -16,6 +16,9 @@ var Config = function(){
 
     // console logging true|false
     this.DEBUG = true;
+    
+    // user session key
+    this.SESSION_KEY = 'PifkoSessionKey';
 
     // general ids
     this.LOGIN_ID = 'login';
@@ -27,9 +30,12 @@ var Config = function(){
     this.ZA_LNG = 18.7394;
 
     // Icons
-    this.iconFolder = 'images';
+    this.iconFolder = 'images/icons';
     this.beerImageGray = this.iconFolder + '/beer-gray.png';
     this.beerImageYellow = this.iconFolder + '/beer-yellow.png';
+    this.BEER_ICON = this.iconFolder + '/beer-icon-normal.png';
+    this.COFFEE_ICON = this.iconFolder + '/coffee-icon-normal.png';
+    this.DRINK_ICON = this.iconFolder + '/drink-icon-normal.png';
 
     // Default google map options
     this.MAPOPTIONS = function(lat, lng){
@@ -39,7 +45,7 @@ var Config = function(){
         options.center.lat = lat;
         options.center.lng = lng;
         options.cscrollwheel = false;
-        options.zoom = 17;
+        options.zoom = 18;
 
         return options;
     };

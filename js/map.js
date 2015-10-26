@@ -8,22 +8,22 @@
  * Version: 1.0.0
  */
 
-/* globals Config, google, Application */
+/* globals google, Application */
 /* exported Map, google */
 
 var Map = function(){
     "use strict";
 
     var MAP = {},
-        CONFIG = new Config(),
         INFOWINDOW = new google.maps.InfoWindow({});
 
     /**
      * Create google map marker
      * @param googlemap - google map object
      * @param data - data object we want to display in google map
+     * @param category - url value to specific category icon
      */
-    MAP.createMarker = function(googlemap, data){
+    MAP.createMarker = function(googlemap, data, category){
         var marker;
         // this statement can indicate if we use foursquare object structure or not
         // TODO Remove Foursquare dependency and create own object data structures
@@ -34,7 +34,7 @@ var Map = function(){
                 lng : data.location.lng
             },
             animation: google.maps.Animation.DROP,
-            icon : CONFIG.beerImageGray
+            icon : category
         });
 
         this.createInfoWindow(googlemap, marker, data);

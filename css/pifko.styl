@@ -5,9 +5,9 @@
 lobster-regular = Lobster, cursive
 
 mapimage = url(../images/zilinamap-normal.jpg) no-repeat top center fixed
-beericon = url(../images/beer-icon.png) no-repeat
-coffeeicon = url(../images/coffee-icon.png) no-repeat
-drinkicon = url(../images/drink-icon.png) no-repeat
+beericon = url(../images/icons/beer-icon-big.png) no-repeat
+coffeeicon = url(../images/icons/coffee-icon-big.png) no-repeat
+drinkicon = url(../images/icons/drink-icon-big.png) no-repeat
 pointershadow = url(../images/pointer-shadow.png) no-repeat
 
 black = #2d2d2f
@@ -132,8 +132,11 @@ body
 	color darkblue
 	z-index 3
 	
-	.fl
-		font 48px lobster-regular
+.menu-logo
+	font 32px lobster-regular
+	
+.fl
+	font 48px lobster-regular
 
 .intro-text
 	height 30vh
@@ -163,6 +166,17 @@ body
 			
 		li.selected > *
 			color cyan
+
+.menu
+	position absolute
+	height 90vh
+	background #fff
+	padding 30px 20px 15px
+	box-sizing border-box
+	z-index 5
+
+.menu.columns
+	position absolute
 
 /* Google maps fix
 ------------------------------------ */

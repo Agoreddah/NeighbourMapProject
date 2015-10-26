@@ -12,7 +12,7 @@
  *  - Sammy js routing functions
  */
 
-/* globals document, console, localStorage, location, google, ko, Config, Navigation, Map, Foursquare, TweenLite, TimelineLite, Power1, jQuery, Sammy */
+/* globals document, console, localStorage, location, setTimeout, google, ko, Config, Navigation, Map, Foursquare, TweenLite, TimelineLite, Power1, jQuery, Sammy */
 /* exported App */
 
 var App = function(){
@@ -42,7 +42,7 @@ var App = function(){
     self.ROUTE = ko.observable('login');
     
     /** Information about subpages, in this moment they are more like components */
-    self.SUBPAGES = [NAV.MENU_SUBPAGE, NAV.MAP_SUBPAGE, NAV.SEARCH_SUBPAGE];
+    self.SUBPAGES = [NAV.SEARCH_SUBPAGE, NAV.MAP_SUBPAGE, NAV.MENU_SUBPAGE];
     self.SUBPAGE = ko.observable(NAV.MAP_SUBPAGE);
 
     /** chosenPlace stores info about clicked place */
@@ -100,9 +100,13 @@ var App = function(){
      */
     self.DATA.subscribe(function(newDATA){
         var i = 0,
-            len = newDATA.length;
+            len = newDATA.length,
+            category;
         for (i, len; i < len; ++i){
-            MAP.createMarker(GOOGLEMAP, newDATA[i]);
+        	// create marker
+        	// self.logger(newDATA[i].categories[0].shortName);
+        	category = newDATA[i].categories[0].shortName;
+            MAP.createMarker(GOOGLEMAP, newDATA[i], self.defineIcon(category));
         }
         self.filteredData(newDATA);
     });
@@ -144,7 +148,33 @@ var App = function(){
     //   App specific functions   //
     //                            //
     ////////////////////////////////
+    
+    /**
+     *  Not yet defined
+     */
+    self.activateSubpage = function(data){
+    	
+    };
 
+	/**
+     * Check User session key in local storage.
+     * TODO
+     * If the value is empty, shows the login-panel
+     * if the value is occupied, show directly application-panel
+     */
+    self.checkUserSessionKey = function(){
+        var userSessionKey = self.localStorageGet(CONFIG.SESSION_KEY);
+        if(!userSessionKey){
+            self.logger('User session key NOT found');
+            return false;
+        }
+        else{
+            self.logger('User session key found');
+            return true;
+            //self.initMap();
+        }
+    };
+    
     /**
      * Render google map function
      * @param latitude, longitude
@@ -153,7 +183,83 @@ var App = function(){
         GOOGLEMAP = new google.maps.Map(document.getElementById(CONFIG.MAPCANVAS_ID), CONFIG.MAPOPTIONS(latitude,longitude));
         return GOOGLEMAP;
     };
+    
+    /**
+     * Define icon for different category
+     * Default icon is BEER_ICON
+     * TODO make more appropriate icons selection
+     */
+    self.defineIcon = function(type){
+    	if(type.indexOf('Bar') > -1 || type.indexOf('Cocktail') > -1){
+    		return CONFIG.DRINK_ICON;
+    	}
+    	else if(type.indexOf('Café') > -1){
+    		return CONFIG.COFFEE_ICON;
+    	}
+    	else{
+    		return CONFIG.BEER_ICON;
+    	}
+    };
 
+    /**
+     * Animation functions
+     * Uses tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
+     */
+    self.dropPointer = function(selector, position){
+    	self.logger('selector is jumping down ' + selector);
+    	var pos = position;
+    	var animation = new TimelineLite();
+	    animation
+	    	.to(selector, 0.45, {top:pos})
+	    	.to(selector, 0.15, {y:-15})
+	    	.to(selector,0.25, {y:0});
+    };
+    
+    self.pointersAnimation = function(){
+    	setTimeout(function() {
+			self.dropPointer('.pointer1', "50%");
+		}, 1000);
+		setTimeout(function() {
+			self.dropPointer('.pointer2', "27%");
+		}, 1500);
+		setTimeout(function() {
+			self.dropPointer('.pointer3', "17%");
+		}, 2000);
+		setTimeout(function() {
+			TweenLite.to('.pointer-shadow', 0.35, {
+				x: 18,
+				y: 8,
+				skewX: -46
+			});
+		}, 2800);
+    };
+    
+    /**
+     * Toggle function for sidebars
+     * TODO
+     * if user clicks the map nav item, all sidebars should disappear
+     * if user clicks the menu nav item, .menu sidebar should appear
+     * if user clicks the search nav item, .search sidebar should appear
+     * if user clicks the single place on the map or via search panel, .single-item sidebar should appear and .search should disappear 
+     */
+	self.toggleSidebar = function(data, event){
+		self.logger('nav item ' + data + ' clicked');
+		if(data === NAV.MENU_SUBPAGE){
+			self.toggleElement('.'+data, "-100%");
+		}
+	};
+	
+	self.toggleElement = function(element, xValue){
+		if(jQuery(element).hasClass('toggled')){
+			jQuery(element).removeClass('toggled');
+			TweenMax.to(element, 0.35, {x:"0%"});
+		}
+		else{
+			TweenMax.to(element, 0.35, {x: xValue});
+			jQuery(element).addClass('toggled');
+		}
+	};
+    
     /**
      * Ajax function to get JSON data from Foursquare api
      * FOURSQUARE.dataUrl(lat, lng) is function used for creating proper dataUrl pattern
@@ -182,68 +288,23 @@ var App = function(){
             }
         });
     };
-
-    /**
-     * Animation functions
-     * Uses tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
-     */
-    self.dropPointer = function(selector, position){
-    	self.logger('selector is jumping down ' + selector);
-    	var pos = position;
-    	var animation = new TimelineLite();
-	    animation
-	    	.to(selector, 0.45, {top:pos})
-	    	.to(selector, 0.15, {y:-15})
-	    	.to(selector,0.25, {y:0});
-    };
     
-    self.pointersAnimation = function(){
-    	setTimeout(function() {
-			Application.dropPointer('.pointer1', "50%");
-		}, 1000);
-		setTimeout(function() {
-			Application.dropPointer('.pointer2', "27%");
-		}, 1500);
-		setTimeout(function() {
-			Application.dropPointer('.pointer3', "17%");
-		}, 2000);
-		setTimeout(function() {
-			TweenLite.to('.pointer-shadow', 0.35, {
-				x: 18,
-				y: 8,
-				skewX: -46
-			});
-		}, 2800);
-    };
-    
-    self.fadeOut = function(selector){
-        self.logger('selector fades out: '+ selector);
-        TweenLite.to(
-            selector,
-            0.35,
-            {"scale":"0.4","opacity":"0","display":"none",ease:Power1.easeOut}
-        );
-    };
-
-    self.fadeIn = function(selector){
-        self.logger('selector fades in: '+ selector);
-        TweenLite.to(
-            selector,
-            0.35,
-            {"scale":"1","opacity":"1","display":"block",ease:Power1.easeOut,delay:0.35}
-        );
-    };
-
     /**
-     * This function initializes page
+     * Function initializes application page
+     * Saves user session TODO create functionality to parse user's positions
      * Save App page to the routing scope
+     */
+    self.initApplication = function(){
+    	self.saveSession(CONFIG.ZA_LAT, CONFIG.ZA_LNG);
+    	self.goToPage(NAV.APP_PAGE);
+    };
+
+    /**
+     * Function initializes map
      * Creates GOOGLEMAP object
-     * Saves position to local storage
      * Requests foursquare json object for current lat lng parameters
      */
     self.initMap = function(){
-        // self.goToPage(NAV.APP_PAGE);
-        self.savePosition(CONFIG.ZA_LAT, CONFIG.ZA_LNG);
         // TODO create functionality to parse user's position
         // navigator.geolocation.getCurrentPosition(self.parsePosition);
         self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));
@@ -251,7 +312,7 @@ var App = function(){
     };
 
     /**
-     * Save data to HTML5 Storage
+     * Save data to HTML5 localStorage 
      * Key is the name of the stored data and will be used as a search parameter
      */
     self.localStorageSet = function(key, data){
@@ -264,7 +325,7 @@ var App = function(){
     };
 
     /**
-     * Get item from HTML5 Storage
+     * Get item from HTML5 localStorage 
      * Key is used as a search parameter
      */
     self.localStorageGet = function(key){
@@ -277,6 +338,20 @@ var App = function(){
         }
         return val;
     };
+    
+    /**
+     * Remove item from HTML5 localStorage
+     * Key param is the key used in localStorage.setItem(key, value);
+     */
+    self.localStorageRemove = function(key){
+    	var val;
+    	try{
+    		self.logger('key: ' + key);
+    		localStorage.removeItem(key);
+    	}catch(e){
+    		self.logger('Error in removing data from localStorage: ' + e);	
+    	}    	
+    };
 
     /**
      * CONFIG.DEBUG logging
@@ -287,6 +362,16 @@ var App = function(){
         if(CONFIG.DEBUG === true && typeof console === "object" ){
             console.log(message);
         }
+    };
+    
+    /**
+     * Logout function
+     * Removes session key from the localStorage
+     * User must visit login page first 
+     */
+    self.logout = function(){
+    	self.localStorageRemove(CONFIG.SESSION_KEY);
+    	self.goToPage(NAV.LOGIN_PAGE);
     };
 
     /**
@@ -333,31 +418,15 @@ var App = function(){
 
     /**
      * Save position data to localStorage and to hidden inputs
-     * @param Object 'User' with predefined latitude and longitude values
+     * @param latitude and longitude values
      */
-    self.savePosition = function(lat, lng){
+    self.saveSession = function(lat, lng){
         var data = {};
         data.latitude = lat;
         data.longitude = lng;
         jQuery('#userLatitude').val(data.latitude);
         jQuery('#userLongitude').val(data.longitude);
-        self.localStorageSet('User',data);
-    };
-
-    /**
-     * Checking User value in local storage.
-     * If the value is empty, shows the login-panel
-     * if the value is occupied, show directly application-panel
-     */
-    self.showPage = function(){
-        var user = self.localStorageGet('User');
-        if(!user){
-            self.logger('User key not found');
-        }
-        else{
-            self.logger('User key founded');
-            //self.initMap();
-        }
+        self.localStorageSet(CONFIG.SESSION_KEY, data);
     };
 
     /**
@@ -378,7 +447,16 @@ var App = function(){
         	self.ROUTE(NAV.LOGIN_PAGE);
         });
         this.get('#application', function(){
-        	self.ROUTE(NAV.APP_PAGE);
+        	// check the user session key stored in local storage
+        	var userSessionKey = self.checkUserSessionKey();
+        	// if session key not found, go to login page
+        	if(!userSessionKey){
+        		self.goToPage(NAV.LOGIN_PAGE);
+        	}
+        	// otherwise, stay in application page
+        	else{
+        		self.ROUTE(NAV.APP_PAGE);
+        	}
         });
     }).run('#login');
 
