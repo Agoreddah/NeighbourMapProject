@@ -14,6 +14,7 @@ black = #2d2d2f
 cyan = #61e7ff
 darkcyan = #05505d
 darkblue = #105e6c
+gray = #a6a6ad
 
 radius = 35px
 
@@ -34,6 +35,12 @@ body
 	noto-regular(15px)
 	line-height 21px
 	color black
+	
+body a
+	color cyan
+	text-decoration none
+	&:hover
+		color cyan
 	
 .hidden
 	display none !important
@@ -72,6 +79,9 @@ body
 	color darkcyan
 	background cyan
 	border none
+
+.page-wrapper
+	overflow hidden
 
 .map-image
 	height 70vh
@@ -163,20 +173,96 @@ body
 			margin 0
 			flex-direction column
 			text-transform capitalize
-			
+		
 		li.selected > *
-			color cyan
+		
+			@media (max-width: 750px)
+				color cyan
 
-.menu
+.sidebar
 	position absolute
 	height 90vh
 	background #fff
 	padding 30px 20px 15px
 	box-sizing border-box
+	transform translate(-100%, 0)
 	z-index 5
 
-.menu.columns
+.sidebar.columns
 	position absolute
+	
+.sidebar-left
+	transform translate(-100%, 0)
+	
+.sidebar-right
+	right 0
+	padding 0
+	margin 0
+	transform translate(100%, 0)
+	overflow hidden
+
+.sidebar-widget
+	position absolute
+	right 0
+	height 90vh
+	width 100%
+	padding 30px 20px 15px
+	box-sizing border-box
+	
+.widget-single-place
+	padding-top 1em
+	transform translate(100%, 0)	
+
+.widget-search-places
+	transform translate(0)
+	
+.list-title,
+.place-title
+	font-size 21px
+	text-transform uppercase
+	
+input.search-input
+	margin 1rem 0 3rem
+	width 100%
+	height 50px
+	line-height 50px
+	border 3px solid cyan
+	border-radius 35px
+	&:focus
+		border 3px solid cyan
+	
+.places-list
+	list-style-type none
+	height 70vh
+	overflow-y scroll
+	margin 0
+
+.place-list-title
+	font-size 1.2em
+	margin 0
+	cursor pointer
+	
+.place-list-category
+	font-size 0.8em
+	margin-bottom 1.5em
+	color gray
+	
+.place-info
+	margin 1em 0 2em
+	
+.place-info p
+	margin 0
+	
+.place-gallery
+	height 70vh
+	overflow-y scroll
+
+.place-gallery ul
+	list-style-type none
+	
+.place-gallery ul img
+	width 100%
+	max-width 100%
 
 /* Google maps fix
 ------------------------------------ */
@@ -200,6 +286,7 @@ a[href^="https://maps.google.com/maps"]
 
 /* Larger than tablet */
 @media (min-width: 750px) {}
+	
 
 /* Larger than desktop */
 @media (min-width: 1000px) {}

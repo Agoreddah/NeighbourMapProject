@@ -42,7 +42,7 @@ var App = function(){
     self.ROUTE = ko.observable('login');
     
     /** Information about subpages, in this moment they are more like components */
-    self.SUBPAGES = [NAV.SEARCH_SUBPAGE, NAV.MAP_SUBPAGE, NAV.MENU_SUBPAGE];
+    self.SUBPAGES = [NAV.MENU_SUBPAGE, NAV.MAP_SUBPAGE, NAV.SEARCH_SUBPAGE];
     self.SUBPAGE = ko.observable(NAV.MAP_SUBPAGE);
 
     /** chosenPlace stores info about clicked place */
@@ -120,12 +120,15 @@ var App = function(){
      * Knockout method used as a router
      * Multiple instances can call this method, save place object to it
      * Then the other instance can update itself by this place object data
+     * ToggleWidgets function creates the animation
      */
     self.goToPlace = function(place){
         self.chosenPlace(place);
         var photosUrl = FOURSQUARE.photosUrl(place.id);
         self.logger('Photos url: '+photosUrl);
         self.getJSON(photosUrl);
+        //self.toggleWidgets();
+        self.openWidget('.widget-single-place');
     };
     
 	/**
@@ -152,7 +155,7 @@ var App = function(){
     /**
      *  Not yet defined
      */
-    self.activateSubpage = function(data){
+    self.activateSubpage = function(){
     	
     };
 
@@ -236,28 +239,72 @@ var App = function(){
     
     /**
      * Toggle function for sidebars
-     * TODO
+     * TODO early draft idea, create better UX
      * if user clicks the map nav item, all sidebars should disappear
      * if user clicks the menu nav item, .menu sidebar should appear
      * if user clicks the search nav item, .search sidebar should appear
      * if user clicks the single place on the map or via search panel, .single-item sidebar should appear and .search should disappear 
      */
-	self.toggleSidebar = function(data, event){
+	self.toggleSidebar = function(data){
 		self.logger('nav item ' + data + ' clicked');
-		if(data === NAV.MENU_SUBPAGE){
-			self.toggleElement('.'+data, "-100%");
+		if( data === NAV.MENU_SUBPAGE ){
+			self.toggleElement('.sidebar-left', "-100%");
+			self.hideElement('.sidebar-right',"100%");
+		}
+		else if( data === NAV.MAP_SUBPAGE ){
+			self.hideElement('.sidebar-left', "-100%");
+			self.hideElement('.sidebar-right', "100%");
+		}
+		else if( data === NAV.SEARCH_SUBPAGE ){
+			self.hideElement('.sidebar-left', "-100%");
+			self.toggleElement('.sidebar-right', "100%");
+		}
+	};
+	
+	self.openWidget = function(widget){
+		self.showElement('.sidebar-right',"0%");
+		self.hideElement('.sidebar-left',"-100%");
+		if(jQuery(widget).hasClass('toggled')){
+			var position, sibling;
+			sibling = jQuery(widget).siblings();
+			position = jQuery(sibling).attr('data-position');
+			self.showElement(widget, "0%");
+			self.hideElement(sibling, position);
+		}
+	};
+	
+	self.toggleWidgets = function(){
+		if(jQuery('.widget-search-places').hasClass('toggled')){
+			self.showElement('.widget-search-places',"0%");
+			self.hideElement('.widget-single-place',"100%");
+		}
+		else{
+			self.hideElement('.widget-search-places',"-100%");
+			self.showElement('.widget-single-place',"0%");
 		}
 	};
 	
 	self.toggleElement = function(element, xValue){
 		if(jQuery(element).hasClass('toggled')){
-			jQuery(element).removeClass('toggled');
-			TweenMax.to(element, 0.35, {x:"0%"});
+			self.showElement(element, "0%");
 		}
 		else{
-			TweenMax.to(element, 0.35, {x: xValue});
-			jQuery(element).addClass('toggled');
+			self.hideElement(element, xValue);
 		}
+	};
+	
+	self.animateElement = function(element, xValue){
+		TweenLite.to(element, 0.35, {x: xValue, ease: Power1.easeOut});
+	};
+	
+	self.hideElement = function(element, xValue){
+		jQuery(element).addClass('toggled');
+		self.animateElement(element, xValue);
+	};
+	
+	self.showElement = function(element, xValue){
+		jQuery(element).removeClass('toggled');
+		self.animateElement(element, xValue);
 	};
     
     /**
@@ -344,7 +391,6 @@ var App = function(){
      * Key param is the key used in localStorage.setItem(key, value);
      */
     self.localStorageRemove = function(key){
-    	var val;
     	try{
     		self.logger('key: ' + key);
     		localStorage.removeItem(key);

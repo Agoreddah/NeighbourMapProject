@@ -79,55 +79,69 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
         <div id="application-page" class="container-max">
             <div class="row">
             	
-            	<!-- menu -->
-            	<div id="menu" class="menu sidebar three columns">
-            		<h1 class="menu-logo"><span class="fl">P</span>ifko</h1>
-            		<p>Project created for Udacity’s front-end developer nanodegree course</p>
-            		<p>Tomas Chudjak &copy; 2015</p>
-            		<p><a href="" data-bind="click : logout"><i class="icon-export"></i>logout</a></p>
+            	<!-- sidebar-left -->
+            	<div class="sidebar sidebar-left four columns toggled">
+            		<!-- menu panel -->
+	            	<div id="menu" class="menu">
+	            		<h1 class="menu-logo"><span class="fl">P</span>ifko</h1>
+	            		<p>Project created for Udacity’s front-end developer nanodegree course</p>
+	            		<p>Tomas Chudjak &copy; 2015</p>
+	            		<p><a href="" data-bind="click : logout"><i class="icon-export"></i>logout</a></p>
+	            	</div>
             	</div>
             	
-            	<!-- search -->
-                <div id="search" class="places three columns hidden">
-                    <h2 class="places-title">List of places</h2>
-                    <input type="search" placeholder="Search places" data-bind="value: search, valueUpdate: 'keyup'" />
-                    <ul data-bind="foreach: filteredData">
-                        <li>
-                            <h5 data-bind="text: name, click: $root.goToPlace"></h5>
-                        </li>
-                    </ul>
+            	<!-- sidebar-right -->
+            	<div class="sidebar sidebar-right four columns toggled">
+            		
+            		<!-- search panel -->
+	                <div id="search" data-position="-100%" class="search widget-search-places sidebar-widget">
+	                    <h2 class="list-title">All places around</h2>
+	                    <input type="search" placeholder="Search places" class="search-input" data-bind="value: search, valueUpdate: 'keyup'" />
+	                    <ul class="places-list" data-bind="foreach: filteredData">
+	                        <li>
+	                            <h3 class="place-list-title" data-bind="text: name, click: $root.goToPlace"></h3>
+	                            <p class="place-list-category" data-bind="text: categories[0].shortName"></p>
+	                        </li>
+	                    </ul>
+	                </div>
+	                
+	                <!-- single place -->
+	                <div id="single-place" data-position="100%" class="sidebar-widget widget-single-place toggled">
+	                	<a href="" data-bind="click : toggleWidgets">
+	                		<i class="icon-left-open-big"></i><span>back to the list</span>
+	                	</a>
+	                    <div class="place-info" data-bind="with: chosenPlace">
+	                        <h2 class="place-title" data-bind="text: name"></h2>
+	                        <p data-bind="text: location.address"></p>
+	                        <p data-bind="text: contact.phone"></p>
+	                    </div>
+	                    <div class="place-gallery">
+	                        <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
+	                            <li>
+	                                <img data-bind="attr : { src : $data }" alt="" />
+	                            </li>
+	                        </ul>
+	                    </div>
+	                </div>
                 </div>
                 
                 <!-- map -->
                 <div id="map-canvas" class="twelve columns" data-bind="map"></div>
 
-				<!-- single place -->
-                <div class="content-wrapper three columns hidden">
-                    <div class="place-info" data-bind="with: chosenPlace">
-                        <h2 class="content-title" data-bind="text: name"></h2>
-                        <p data-bind="text: location.address"></p>
-                        <p data-bind="text: contact.phone"></p>
-                    </div>
-                    <div class="place-gallery">
-                        <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
-                            <li>
-                                <img data-bind="attr : { src : $data }" alt="" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
             </div>
             
             <!-- navigation -->
-            <div id="nav" class="navigation container">
-            	<ul data-bind="foreach: SUBPAGES">
-            		<li data-bind="css : { selected: $data == $root.SUBPAGE()}">
-            			<a href="" data-bind="click : Application.toggleSidebar">
-            			<i data-bind="attr : {'class' : 'icon-'+$data}"></i>
-            			<span class="nav-text" data-bind="text: $data"></span>
-            			</a>
-            		</li>
-            	</ul>
+            <div id="nav" class="navigation row">
+            	<div class="container">
+	            	<ul data-bind="foreach: SUBPAGES">
+	            		<li data-bind="css : { selected: $data == $root.SUBPAGE()}">
+	            			<a href="" data-bind="click : Application.toggleSidebar">
+	            			<i data-bind="attr : {'class' : 'icon-'+$data}"></i>
+	            			<span class="nav-text" data-bind="text: $data"></span>
+	            			</a>
+	            		</li>
+	            	</ul>
+            	</div>
             </div>
         </div>
     </script>
