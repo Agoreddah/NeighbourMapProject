@@ -212,7 +212,7 @@ var App = function(){
      */
     self.dropPointer = function(selector, positionX){
     	self.logger('selector is jumping down ' + selector);
-    	var posX = position;
+    	var posX = positionX;
     	var animation = new TimelineLite();
 	    animation
 	    	.to(selector, 0.45, {top:posX})
