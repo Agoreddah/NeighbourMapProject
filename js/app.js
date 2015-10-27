@@ -10,6 +10,8 @@
  * 	- Knockout js functions and observables
  *  - App specific functions
  *  - Sammy js routing functions
+ * 
+ * Animation functions use tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
  */
 
 /* globals document, console, localStorage, location, setTimeout, google, ko, Config, Navigation, Map, Foursquare, TweenLite, TimelineLite, Power1, jQuery, Sammy */
@@ -96,7 +98,8 @@ var App = function(){
 
 
     /**
-     * When the DATA are update from given JSON response, each entry creates the map marker
+     * When the DATA are updated from given JSON response, 
+     * each entry creates the map marker
      */
     self.DATA.subscribe(function(newDATA){
         var i = 0,
@@ -111,6 +114,10 @@ var App = function(){
         self.filteredData(newDATA);
     });
 
+	/**
+	 * When PHOTOS are updated from given JSON response,
+	 * each entry creates PHOTOS_ALBUM observable with array of foursquare photos
+	 */
     self.PHOTOS.subscribe(function(newPhotos){
         var album = FOURSQUARE.parseAllPhotos(newPhotos);
         self.PHOTOS_ALBUM(album);
@@ -151,13 +158,6 @@ var App = function(){
     //   App specific functions   //
     //                            //
     ////////////////////////////////
-    
-    /**
-     *  Not yet defined
-     */
-    self.activateSubpage = function(){
-    	
-    };
 
 	/**
      * Check User session key in local storage.
@@ -184,6 +184,7 @@ var App = function(){
      */
     self.createMap = function(latitude, longitude){
         GOOGLEMAP = new google.maps.Map(document.getElementById(CONFIG.MAPCANVAS_ID), CONFIG.MAPOPTIONS(latitude,longitude));
+        GOOGLEMAP.setOptions({styles: CONFIG.MAPSTYLES});
         return GOOGLEMAP;
     };
     
@@ -205,19 +206,25 @@ var App = function(){
     };
 
     /**
-     * Animation functions
-     * Uses tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
+     * Login page drop pointer animation
+     * @param selector - pointer's selector
+     * @param positionX - X axis where pointer should drop
      */
-    self.dropPointer = function(selector, position){
+    self.dropPointer = function(selector, positionX){
     	self.logger('selector is jumping down ' + selector);
-    	var pos = position;
+    	var posX = position;
     	var animation = new TimelineLite();
 	    animation
-	    	.to(selector, 0.45, {top:pos})
+	    	.to(selector, 0.45, {top:posX})
 	    	.to(selector, 0.15, {y:-15})
 	    	.to(selector,0.25, {y:0});
     };
     
+    /**
+     * Full pointers animation
+     * Pointers are dropping one by one
+     * At the end they put shadow 
+     */
     self.pointersAnimation = function(){
     	setTimeout(function() {
 			self.dropPointer('.pointer1', "50%");
@@ -244,23 +251,39 @@ var App = function(){
      * if user clicks the menu nav item, .menu sidebar should appear
      * if user clicks the search nav item, .search sidebar should appear
      * if user clicks the single place on the map or via search panel, .single-item sidebar should appear and .search should disappear 
-     */
+     *
+     * ToggleSidebar function
+     * Bottom navigation panel action and sidebars reaction behavior
+     * */
 	self.toggleSidebar = function(data){
 		self.logger('nav item ' + data + ' clicked');
+		// if we click menu nav item, sidebar left should toggle, sidebar right should hide
 		if( data === NAV.MENU_SUBPAGE ){
 			self.toggleElement('.sidebar-left', "-100%");
 			self.hideElement('.sidebar-right',"100%");
 		}
+		// if we click map nav item, both sidebars should hide
 		else if( data === NAV.MAP_SUBPAGE ){
 			self.hideElement('.sidebar-left', "-100%");
 			self.hideElement('.sidebar-right', "100%");
 		}
+		// if we click search nav item, sidebar left should hide, sidebar right should toggle
 		else if( data === NAV.SEARCH_SUBPAGE ){
 			self.hideElement('.sidebar-left', "-100%");
 			self.toggleElement('.sidebar-right', "100%");
 		}
 	};
 	
+	/**
+	 * Right sidebar contains 2 widgets
+	 * The Search Widget and The Single Place Widget
+	 * The Search Widget should hide to the left side
+	 * The Single Place Widget should hide to the right side
+	 * Each of them contains data-position attribute with values 100%|-100%
+	 * Values are used as a X axis parameter where the widget will hide
+	 * Basic X position is 0%
+	 * @param widget - widget's selector 
+	 */
 	self.openWidget = function(widget){
 		self.showElement('.sidebar-right',"0%");
 		self.hideElement('.sidebar-left',"-100%");
@@ -273,6 +296,10 @@ var App = function(){
 		}
 	};
 	
+	/**
+	 * Toggle widget function with some hard coded values
+	 * TODO remove 
+	 */
 	self.toggleWidgets = function(){
 		if(jQuery('.widget-search-places').hasClass('toggled')){
 			self.showElement('.widget-search-places',"0%");
@@ -284,6 +311,13 @@ var App = function(){
 		}
 	};
 	
+	/**
+	 * Toggle element function
+	 * If the element is toggled, it contains same named class
+	 * Basix X position is 0%
+	 * @param element - selector
+	 * @param xValue - X axis value where elements will hide (100% right|-100% left) 
+	 */
 	self.toggleElement = function(element, xValue){
 		if(jQuery(element).hasClass('toggled')){
 			self.showElement(element, "0%");
@@ -293,15 +327,30 @@ var App = function(){
 		}
 	};
 	
+	/**
+	 * Animation function
+	 * @param element - selector
+	 * @param xValue - X axis value where elements will animate (100% right|-100% left)
+	 */
 	self.animateElement = function(element, xValue){
 		TweenLite.to(element, 0.35, {x: xValue, ease: Power1.easeOut});
 	};
 	
+	/**
+	 * Hide function
+	 * @param element - selector
+	 * @param xValue - X axis value where elements will hide (100% right|-100% left)
+	 */
 	self.hideElement = function(element, xValue){
 		jQuery(element).addClass('toggled');
 		self.animateElement(element, xValue);
 	};
 	
+	/**
+	 * Show function
+	 * @param element - selector
+	 * @param xValue - X axis value where elements will show (100% right|-100% left)
+	 */
 	self.showElement = function(element, xValue){
 		jQuery(element).removeClass('toggled');
 		self.animateElement(element, xValue);
@@ -488,6 +537,11 @@ var App = function(){
     //                           	  //
     ////////////////////////////////////
     
+    /**
+     * Requires Sammy js
+     * Must be placed down after all other required functions are described
+     * #login is the first page user must visit 
+     */
 	new Sammy(function() {
         this.get('#login', function(){
         	self.ROUTE(NAV.LOGIN_PAGE);

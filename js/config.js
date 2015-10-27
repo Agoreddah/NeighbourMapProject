@@ -45,9 +45,26 @@ var Config = function(){
         options.center.lat = lat;
         options.center.lng = lng;
         options.cscrollwheel = false;
-        options.zoom = 18;
+        options.zoom = 19;
 
         return options;
     };
+    
+    // Custom map styles
+    this.MAPSTYLES = [
+	  {
+	    "featureType": "poi",
+	    "stylers": [
+	      { "visibility": "off" }
+	    ]
+	  },{
+	    "featureType": "landscape",
+	    "stylers": [
+	      { "visibility": "on" },
+	      { "weight": 0.1 },
+	      { "hue": "#0011ff" }
+	    ]
+	  }
+	];
 
 };

@@ -37,10 +37,10 @@ body
 	color black
 	
 body a
-	color cyan
+	color black
 	text-decoration none
 	&:hover
-		color cyan
+		color black
 	
 .hidden
 	display none !important
@@ -136,25 +136,27 @@ body a
 .logo
 	position absolute
 	width 100%
-	font 32px lobster-regular
 	padding 35px 0 0
 	text-align center
+	font-weight 700
 	color darkblue
 	z-index 3
 	
-.menu-logo
-	font 32px lobster-regular
-	
 .fl
-	font 48px lobster-regular
+	font-size 1.5em
 
 .intro-text
 	height 30vh
+	padding 5vhem 0 0
 	display block
 	text-align center
+	box-sizing border-box
 	
 	.button
-		margin 5vh auto 4vh
+		margin 0 auto
+		
+	p
+		margin-bottom 1em
 
 #map-canvas
 	height 90vh
@@ -177,13 +179,13 @@ body a
 		li.selected > *
 		
 			@media (max-width: 750px)
-				color cyan
+				color black
 
 .sidebar
 	position absolute
 	height 90vh
 	background #fff
-	padding 30px 20px 15px
+	padding 1em 1.5em
 	box-sizing border-box
 	transform translate(-100%, 0)
 	z-index 5
@@ -206,7 +208,7 @@ body a
 	right 0
 	height 90vh
 	width 100%
-	padding 30px 20px 15px
+	padding 1em 1.5em
 	box-sizing border-box
 	
 .widget-single-place
@@ -220,16 +222,17 @@ body a
 .place-title
 	font-size 21px
 	text-transform uppercase
+	margin 0 0 1em
 	
 input.search-input
-	margin 1rem 0 3rem
+	margin 0 0 1em
 	width 100%
 	height 50px
 	line-height 50px
-	border 3px solid cyan
+	border 1px solid black
 	border-radius 35px
 	&:focus
-		border 3px solid cyan
+		border 1px solid black
 	
 .places-list
 	list-style-type none
@@ -263,20 +266,36 @@ input.search-input
 .place-gallery ul img
 	width 100%
 	max-width 100%
+	
+.marker-title
+	noto-bold(1.5em)
+	margin 0
+
+.marker-description
+	noto-regular(1em)
+	margin 0
 
 /* Google maps fix
 ------------------------------------ */
+
+/* Hide map reference */
 a[href^="http://maps.google.com/maps"]
 a[href^="https://maps.google.com/maps"]
-	display none !important
-	
 .gmnoprint
 .gmnoprint gm-style-cc
 .gm-style-cc
-	display none
+	display none !important
 
 .gmnoprint div
 	background none !important
+	
+/* Style info window */
+.gm-style-iwdddd
+	width 270px !important
+	top 0 !important
+	left 0 !important
+	border-radius 35px
+
 
 /* Larger than mobile */
 @media (min-width: 400px) {}

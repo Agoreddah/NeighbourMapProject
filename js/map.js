@@ -74,8 +74,8 @@ var Map = function(){
     MAP.createInfoWindowContent = function(data){
         var content;
         content ='<div class="info-marker">';
-        content +='<h2>'+data.name+'</h2>';
-        content +='<p>'+data.categories[0].name+'</p>';
+        content +='<h3 class="marker-title">'+data.name+'</h3>';
+        content +='<p class="marker-description">'+data.categories[0].name+'</p>';
         content +='</div>';
         return content;
     };
