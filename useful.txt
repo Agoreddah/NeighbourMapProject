@@ -1,1 +1,8 @@
+# Simple map image
 http://maps.google.com/maps/api/staticmap?sensor=false&size=1024x1024&scale=2&center=zilina&zoom=17&style=feature:all|element:labels|visibility:off
+
+# Animation functions with tweenlite js
+http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
+
+# Stylus css preprocessor
+https://learnboost.github.io/stylus/
