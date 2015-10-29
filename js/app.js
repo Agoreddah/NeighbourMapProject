@@ -40,6 +40,10 @@ var App = function(){
     self.PHOTOS = ko.observableArray([]);
     self.PHOTOS_ALBUM = ko.observableArray([]);
     
+    /** MARKERS stores selecter users markers */
+    self.MARKERS = ko.observableArray([]);
+    self.ACTIVE_MARKERS = ko.observableArray([]);
+    
     /** PAGER stores current routing value */
     self.ROUTE = ko.observable('login');
     
@@ -105,11 +109,15 @@ var App = function(){
         var i = 0,
             len = newDATA.length,
             category;
+
         for (i, len; i < len; ++i){
         	// create marker
         	// self.logger(newDATA[i].categories[0].shortName);
         	category = newDATA[i].categories[0].shortName;
-            MAP.createMarker(GOOGLEMAP, newDATA[i], self.defineIcon(category));
+        	
+        	// get marker object and store it to self.MARKERS observable via helper function
+            var marker = MAP.createMarker(GOOGLEMAP, newDATA[i], self.defineIcon(category));
+            self.storeMarker(marker);
         }
         self.filteredData(newDATA);
     });
@@ -122,20 +130,33 @@ var App = function(){
         var album = FOURSQUARE.parseAllPhotos(newPhotos);
         self.PHOTOS_ALBUM(album);
     });
+    
+    /**
+     * When the ACTIVE_MARKERS observable array is updated
+     * Animation of all markers is set to null
+     * Only markers from ACIVE_MARKERS observable array are bounced 
+     */
+    self.ACTIVE_MARKERS.subscribe(function(activeMarkers){
+    	// set animation to null for all markers
+    	MAP.markersStopBounce(self.MARKERS());
+    	// bounce only active markers
+    	MAP.markersStartBounce(self.ACTIVE_MARKERS());
+    });
 
     /**
      * Knockout method used as a router
      * Multiple instances can call this method, save place object to it
      * Then the other instance can update itself by this place object data
-     * ToggleWidgets function creates the animation
+     * openWidget function creates the animation
+     * add place's marker id to ACTIVE_MARKERS observable array
      */
     self.goToPlace = function(place){
         self.chosenPlace(place);
         var photosUrl = FOURSQUARE.photosUrl(place.id);
         self.logger('Photos url: '+photosUrl);
         self.getJSON(photosUrl);
-        //self.toggleWidgets();
         self.openWidget('.widget-single-place');
+        self.addActiveMarker(place.id);
     };
     
 	/**
@@ -146,12 +167,54 @@ var App = function(){
     };
     
     /**
-     * Subpages are not handled by the Sammy js (maybe in future)
+     * Subpages are not handled by the Sammy js (maybe in the future)
      * At this moment, I only need to save some info about currently used subpage
      */
     self.gotToSubpage = function(subpage){
     	self.SUBPAGE(subpage);
     };
+    
+    /**
+     * Add marker to ACTIVE_MARKERS observable array
+     * Bit complex, but offers a possibility to add marker directly as a object
+     * or add marker via it's id. Function checks the MARKERS observable array
+     * and finds the marker via it's id value
+     * @param marker - marker object reference or marker id value
+     */
+    self.addActiveMarker = function(markerId){
+    	var i = 0,
+    		len = self.MARKERS().length;
+
+    	if(typeof(markerId) === "string"){
+    		for (i, len; i < len; i++){
+    			if(self.MARKERS()[i].id === markerId){
+    				self.ACTIVE_MARKERS.push(self.MARKERS()[i]);
+    			}
+    		}
+    	}
+    	else{
+    		// failed results, do nothing
+    	}
+    };
+
+	/**
+	 * Remove marker from ACTIVE_MARKERS observable array
+	 * @param marker - marker object reference 
+	 */
+	self.removeActiveMarker = function(marker){
+		// knockout js way		
+		self.ACTIVE_MARKERS.remove(marker);
+		// javascript way
+		// var i = self.ACTIVE_MARKERS.indexOf(marker);
+		// if( i !== -1 ){self.ACTIVE_MARKERS.splice(i, 1);}
+	};
+	
+	/**
+	 * Remove all markers from ACTIVE_MARKERS observable array 
+	 */
+	self.removeAllActiveMarkers = function(){
+		self.ACTIVE_MARKERS.removeAll();
+	};
 
     ////////////////////////////////
     //                            //
@@ -161,7 +224,6 @@ var App = function(){
 
 	/**
      * Check User session key in local storage.
-     * TODO
      * If the value is empty, shows the login-panel
      * if the value is occupied, show directly application-panel
      */
@@ -174,7 +236,6 @@ var App = function(){
         else{
             self.logger('User session key found');
             return true;
-            //self.initMap();
         }
     };
     
@@ -297,18 +358,16 @@ var App = function(){
 	};
 	
 	/**
-	 * Toggle widget function with some hard coded values
-	 * TODO remove 
+	 * Back to search widget function
+	 * Closes all opened infowindows
+	 * Removes all active markers from ACTIVE_MARKERS observable array
+	 * @param data - data parsed via knockout js
+	 * @param event - event info parsed via knockout js 
 	 */
-	self.toggleWidgets = function(){
-		if(jQuery('.widget-search-places').hasClass('toggled')){
-			self.showElement('.widget-search-places',"0%");
-			self.hideElement('.widget-single-place',"100%");
-		}
-		else{
-			self.hideElement('.widget-search-places',"-100%");
-			self.showElement('.widget-single-place',"0%");
-		}
+	self.backToTheList = function(data, event){
+		self.removeAllActiveMarkers();
+		MAP.closeInfoWindows();
+		self.openWidget('.widget-search-places');
 	};
 	
 	/**
@@ -522,6 +581,15 @@ var App = function(){
         jQuery('#userLatitude').val(data.latitude);
         jQuery('#userLongitude').val(data.longitude);
         self.localStorageSet(CONFIG.SESSION_KEY, data);
+    };
+    
+    /**
+     * Store created marker to self.MARKERS observable
+     * this will help to manage marker actions
+     * @param marker - marker object reference 
+     */
+    self.storeMarker = function(marker){
+    	self.MARKERS.push(marker);
     };
 
     /**

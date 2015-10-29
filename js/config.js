@@ -31,8 +31,6 @@ var Config = function(){
 
     // Icons
     this.iconFolder = 'images/icons';
-    this.beerImageGray = this.iconFolder + '/beer-gray.png';
-    this.beerImageYellow = this.iconFolder + '/beer-yellow.png';
     this.BEER_ICON = this.iconFolder + '/beer-icon-normal.png';
     this.COFFEE_ICON = this.iconFolder + '/coffee-icon-normal.png';
     this.DRINK_ICON = this.iconFolder + '/drink-icon-normal.png';
@@ -45,7 +43,7 @@ var Config = function(){
         options.center.lat = lat;
         options.center.lng = lng;
         options.cscrollwheel = false;
-        options.zoom = 19;
+        options.zoom = 18;
 
         return options;
     };
@@ -57,14 +55,16 @@ var Config = function(){
 	    "stylers": [
 	      { "visibility": "off" }
 	    ]
-	  },{
+	  }
+	  // colored map, not satisfied
+	  /*,{
 	    "featureType": "landscape",
 	    "stylers": [
 	      { "visibility": "on" },
 	      { "weight": 0.1 },
 	      { "hue": "#0011ff" }
 	    ]
-	  }
+	  }*/
 	];
 
 };

@@ -108,10 +108,16 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 	                
 	                <!-- single place -->
 	                <div id="single-place" data-position="100%" class="sidebar-widget widget-single-place toggled">
-	                	<a href="" data-bind="click : toggleWidgets">
-	                		<i class="icon-left-open-big"></i><span>back to the list</span>
-	                	</a>
 	                    <div class="place-info" data-bind="with: chosenPlace">
+	                    	<div class="widget-nav">
+	                    		<a href="" data-bind="click : $root.backToTheList">
+	                				<i class="icon-left-open-big"></i><span>back to the list</span>
+	                			</a>
+	                			<a href="" onclick="Application.hideElement('.sidebar-left','-100%');">
+	                				<i class="icon-right-open-big"></i>
+	                				<i class="icon-left-open-big"></i>
+	                			</a>
+	                    	</div>
 	                        <h2 class="place-title" data-bind="text: name"></h2>
 	                        <p data-bind="text: location.address"></p>
 	                        <p data-bind="text: contact.phone"></p>
