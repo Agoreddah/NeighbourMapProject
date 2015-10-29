@@ -54,9 +54,10 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
-.icon-menu:before { content: '\e800'; } /* '' */
-.icon-map:before { content: '\e801'; } /* '' */
-.icon-left-open-big:before { content: '\e802'; } /* '' */
+.icon-cancel:before { content: '\e800'; } /* '' */
+.icon-menu:before { content: '\e801'; } /* '' */
+.icon-map:before { content: '\e802'; } /* '' */
 .icon-right-open-big:before { content: '\e803'; } /* '' */
-.icon-export:before { content: '\e804'; } /* '' */
-.icon-search:before { content: '\e805'; } /* '' */
+.icon-left-open-big:before { content: '\e804'; } /* '' */
+.icon-export:before { content: '\e805'; } /* '' */
+.icon-search:before { content: '\e806'; } /* '' */

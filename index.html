@@ -84,6 +84,11 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
             	<div class="sidebar sidebar-left four columns toggled">
             		<!-- menu panel -->
 	            	<div id="menu" class="menu">
+	            		<div class="widget-nav">
+	                		<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-left','-100%');return false;">
+	                			<i class="icon-cancel"></i>
+	                		</a>
+	                    </div>
 	            		<h1 class="menu-logo"><span class="fl">P</span>ifko</h1>
 	            		<p>Project created for Udacity’s front-end developer nanodegree course</p>
 	            		<p>Tomas Chudjak &copy; 2015</p>
@@ -96,7 +101,11 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
             		
             		<!-- search panel -->
 	                <div id="search" data-position="-100%" class="search widget-search-places sidebar-widget">
-	                    <h2 class="list-title">All places around</h2>
+	                    <h2 class="list-title">All places around 
+	                    	<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-right','100%');return false;">
+	                			<i class="icon-cancel"></i>
+	                		</a>
+	                	</h2>
 	                    <input type="search" placeholder="Search places" class="search-input" data-bind="value: search, valueUpdate: 'keyup'" />
 	                    <ul class="places-list" data-bind="foreach: filteredData">
 	                        <li>
@@ -113,9 +122,8 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 	                    		<a href="" data-bind="click : $root.backToTheList">
 	                				<i class="icon-left-open-big"></i><span>back to the list</span>
 	                			</a>
-	                			<a href="" onclick="Application.hideElement('.sidebar-left','-100%');">
-	                				<i class="icon-right-open-big"></i>
-	                				<i class="icon-left-open-big"></i>
+	                			<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-right','100%');return false;">
+	                				<i class="icon-cancel"></i>
 	                			</a>
 	                    	</div>
 	                        <h2 class="place-title" data-bind="text: name"></h2>
@@ -178,30 +186,9 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
         ko.applyBindings(Application);
 
         jQuery('document').ready(function() {
-            //Application.showPage();
+            //
         });
 
-        // run the pointers animation when the page is fully loaded and prepared
-        /*document.onreadystatechange = function() {
-            if (document.readyState == "complete") {
-                setTimeout(function() {
-                    Application.dropPointer('.pointer1', "50%");
-                }, 1000);
-                setTimeout(function() {
-                    Application.dropPointer('.pointer2', "27%");
-                }, 1500);
-                setTimeout(function() {
-                    Application.dropPointer('.pointer3', "17%");
-                }, 2000);
-                setTimeout(function() {
-                    TweenLite.to('.pointer-shadow', 0.35, {
-                        x: 18,
-                        y: 8,
-                        skewX: -46
-                    });
-                }, 2800);
-            }
-        };*/
     </script>
 </body>
 
