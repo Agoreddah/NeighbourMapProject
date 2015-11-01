@@ -161,15 +161,7 @@ var App = function(){
         self.chosenPlace(place);
         var photosUrl = FOURSQUARE.photosUrl(place.id);
         self.logger('Photos url: '+photosUrl);
-        var photosResult = self.getJSON(photosUrl);
-        
-        if(photosResult === "success"){
-        	
-        }
-        else{
-        	
-        }
-        
+        self.getJSON(photosUrl);
         self.openWidget('.widget-single-place');
         self.addActiveMarker(place.id);
     };
