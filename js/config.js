@@ -24,6 +24,9 @@ var Config = function(){
     this.LOGIN_ID = 'login';
     this.APP_ID = 'application';
     this.MAPCANVAS_ID = 'map-canvas';
+    
+    // messages
+    this.ERROR_MSG = 'Error while retrieving data. Please refresh the page or try again later!';
 
     // LatLng of Zilina
     this.ZA_LAT = 49.2234;

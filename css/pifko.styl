@@ -16,6 +16,7 @@ darkcyan = #05505d
 darkblue = #105e6c
 gray = #a6a6ad
 lightgray = #DFDFE8
+red = #9C0C0C;
 
 radius = 35px
 
@@ -83,6 +84,25 @@ body a
 	color darkcyan
 	background cyan
 	border none
+
+.error-message
+	display none
+	width 350px
+	max-width 90%
+	position absolute
+	top 1em
+	left 50%
+	margin-left -175px
+	padding 5px
+	background white
+	color red
+	font-size 0.85em
+	border 1px solid red
+	border-sizing border-box
+	z-index 99
+	
+.close-message
+	cursor pointer
 
 .page-wrapper
 	overflow hidden

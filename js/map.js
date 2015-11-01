@@ -55,13 +55,26 @@ var Map = function(){
     		Application.removeAllActiveMarkers();
     		
     		// set marker to the center of the screen
-    		googlemap.panTo(marker.getPosition());
+    		MAP.centerMarker(googlemap, marker);
     		
     		setTimeout(function(){
     			// single bounce animation
     			MAP.markerBounceStart(marker);
     		}, 350);
     	});
+    };
+    
+    /**
+     * Center screen to marker position
+     * @param google map - google map object
+     * @param marker - marker object reference 
+     */
+    MAP.centerMarker = function(googlemap, marker){
+    	var position = {
+    		lat : marker.position.lat(),
+    		lng : marker.position.lng()
+    	};
+    	googlemap.panTo(position);
     };
     
     /**

@@ -57,6 +57,9 @@ var App = function(){
     /** search is actived in search place input field */
     self.search = ko.observable('');
     
+    /** Error message observable */
+   self.error = ko.observable();
+    
     /** custom binding to invoke google map after map template is rendered
      *  there have been issues to invoke google maps:
      *  #map-canvas dom node must be present before google scripts are called
@@ -139,6 +142,10 @@ var App = function(){
     self.ACTIVE_MARKERS.subscribe(function(activeMarkers){
     	// set animation to null for all markers
     	MAP.markersStopBounce(self.MARKERS());
+    	// center marker
+		if(activeMarkers.length > 0){
+			MAP.centerMarker(GOOGLEMAP, activeMarkers[0]);
+		}
     	// bounce only active markers
     	MAP.markersStartBounce(self.ACTIVE_MARKERS());
     });
@@ -154,7 +161,15 @@ var App = function(){
         self.chosenPlace(place);
         var photosUrl = FOURSQUARE.photosUrl(place.id);
         self.logger('Photos url: '+photosUrl);
-        self.getJSON(photosUrl);
+        var photosResult = self.getJSON(photosUrl);
+        
+        if(photosResult === "success"){
+        	
+        }
+        else{
+        	
+        }
+        
         self.openWidget('.widget-single-place');
         self.addActiveMarker(place.id);
     };
@@ -306,6 +321,35 @@ var App = function(){
     };
     
     /**
+     * Error message function
+     * Fills error observable
+     * @param text - string 
+     */
+    self.errorMessage = function(text){
+    	self.error(text);
+    	self.openMessage(text);
+    	self.logger('error: '+text);
+    };
+    
+    /**
+     * TODO message management
+     * Open message function
+     * @param text - string 
+     */
+    self.openMessage = function(text){
+    	jQuery('.error-text').text(text);
+    	jQuery('.error-message').css('display','block');
+    };
+
+    /**
+     * Close message function
+     * @param text - string 
+     */    
+    self.closeMessage = function(){
+    	jQuery('.error-message').hide();
+    };
+    
+    /**
      * Toggle function for sidebars
      * TODO early draft idea, create better UX
      * if user clicks the map nav item, all sidebars should disappear
@@ -364,7 +408,7 @@ var App = function(){
 	 * @param data - data parsed via knockout js
 	 * @param event - event info parsed via knockout js 
 	 */
-	self.backToTheList = function(data, event){
+	self.backToTheList = function(){
 		self.removeAllActiveMarkers();
 		MAP.closeInfoWindows();
 		self.openWidget('.widget-search-places');
@@ -422,26 +466,36 @@ var App = function(){
      * @param url what returns JSON object
      */
     self.getJSON = function(dataUrl){
-    	self.logger(dataUrl);
-        jQuery.getJSON(dataUrl, function(data){
-            var places, photos;
-
-            /** check for places */
-            if(data.response.hasOwnProperty('venues')){
-                places = data.response.venues;
-                self.DATA(places);
-                self.logger(self.DATA);
-            }
-            /** check for photos */
-            else if(data.response.hasOwnProperty('photos')){
-                photos = data.response.photos;
-                self.PHOTOS(photos);
-                self.logger(self.PHOTOS);
-            }
-            else{
-                self.logger('error, nothing has returned');
-            }
+    	self.logger(dataUrl); 	
+    	
+        return jQuery.getJSON(dataUrl, function(){
+           
+        })
+        .done(function(data){
+        	self.logger('success: ' + dataUrl);
+			self.saveData(data);
+        })
+        .fail(function(){
+        	self.errorMessage(CONFIG.ERROR_MSG);
         });
+    };
+    
+    self.saveData = function(data){
+    	// check if we save photos
+    	if(data.response.hasOwnProperty('photos')){
+    		var photos = data.response.photos;
+    		self.PHOTOS(photos);
+    		self.logger(self.PHOTOS);
+    	}
+    	// check if we save places
+    	else if(data.response.hasOwnProperty('venues')){
+    		var places = data.response.venues;
+    		self.DATA(places);
+    		self.logger(self.DATA);
+    	}
+    	else{
+    		self.errorMessage(CONFIG.ERROR_MSG);
+    	}
     };
     
     /**
@@ -461,8 +515,8 @@ var App = function(){
      */
     self.initMap = function(){
         // TODO create functionality to parse user's position
-        // navigator.geolocation.getCurrentPosition(self.parsePosition);
-        self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));
+        // navigator.geolocation.getCurrentPosition(self.parsePosition);        
+        self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));        
         GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);
     };
 

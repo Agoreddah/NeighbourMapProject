@@ -67,6 +67,8 @@ var Foursquare = function(){
         var searchQuery = this.searchQuery(param);
         lat = this.numberFix(lat);
         lng = this.numberFix(lng);
+        // error test
+        // return "http://www.google.com";
         return this.foursquareUrl + "search?"+this.searchCategory(this.NIGHTSPOT_ID)+this.radius+this.clientId+this.clientSecret+"&v=20130815&ll="+lat+","+lng+searchQuery;
     };
 

@@ -107,12 +107,13 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 	                		</a>
 	                	</h2>
 	                    <input type="search" placeholder="Search places" class="search-input" data-bind="value: search, valueUpdate: 'keyup'" />
-	                    <ul class="places-list" data-bind="foreach: filteredData">
+	                    <ul class="places-list" data-bind="foreach: filteredData, visible: filteredData().length > 0 ">
 	                        <li>
 	                            <h3 class="place-list-title" data-bind="text: name, click: $root.goToPlace"></h3>
 	                            <p class="place-list-category" data-bind="text: categories[0].shortName"></p>
 	                        </li>
 	                    </ul>
+	                    <p data-bind="visible: filteredData().length === 0">No places found</p>
 	                </div>
 	                
 	                <!-- single place -->
@@ -127,6 +128,7 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 	                			</a>
 	                    	</div>
 	                        <h2 class="place-title" data-bind="text: name"></h2>
+	                        <p data-bind="text: categories[0].shortName"></p>
 	                        <p data-bind="text: location.address"></p>
 	                        <p data-bind="text: contact.phone"></p>
 	                    </div>
@@ -136,6 +138,9 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
 	                                <img data-bind="attr : { src : $data }" alt="" />
 	                            </li>
 	                        </ul>
+
+	                         <p data-bind="visible: PHOTOS_ALBUM().length === 0">No photos found</p>
+
 	                    </div>
 	                </div>
                 </div>
@@ -161,13 +166,13 @@ img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-
         </div>
     </script>
     <!-- #application -->
-
-    <!-- info window html data.  
-    <div id="markerSkelet" data-bind="width: DATA">
-        <h2 data-bind="text:name"></h2>
-        <p data-bind="click: $root.goToPlace">Click</p>
+    
+    <!-- messages -->
+    <div class="error-message">
+    	<span class="error-text"></span>
+    	<span class="icon-cancel close-message" onclick="Application.closeMessage();"></span>
     </div>
--->
+    
     <!-- hidden fields
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <input type="hidden" id="userLatitude" name="userLatitude" value="" />
