@@ -82,26 +82,33 @@ var App = function(){
      * self.DATA is original object from JSON response
      * this object is getting filtered when the self.search method is called
      * We use arrayFilter to filter self.DATA by the given string stored in self.search()
+     * #Fixed ko.computable bug. Read and write options has been missing
      */
-    self.filteredData = ko.computed(function () {
-        var filter = self.search();
-        if (!filter) {
-            return self.DATA();
-        } else {
-          return ko.utils.arrayFilter(self.DATA(), function (item) {
-                // remove Uppercase and diacritics from the item names and search string
-                var place = item.name,
-                    loweredPlace = place.toLowerCase(),
-                    loweredFilter = filter.toLowerCase(),
-                    rawPlace = self.removeDiacritics(loweredPlace),
-                    rawFilter = self.removeDiacritics(loweredFilter);
+    self.filteredData = ko.computed({
+		read: function () {
+            var filter = self.search();
+            if (!filter) {
+            	return self.DATA();
+        	} else {
+          		return ko.utils.arrayFilter(self.DATA(), function (item) {
+                	// remove Uppercase and diacritics from the item names and search string
+	                var place = item.name,
+	                    loweredPlace = place.toLowerCase(),
+	                    loweredFilter = filter.toLowerCase(),
+	                    rawPlace = self.removeDiacritics(loweredPlace),
+	                    rawFilter = self.removeDiacritics(loweredFilter);
 
-                if(rawPlace.indexOf(rawFilter) > -1){
-                    return item;
-                }
-            });
-        }
-    });
+	                if(rawPlace.indexOf(rawFilter) > -1){
+	                    return item;
+	                }
+        		});
+        	}
+        },
+        write: function () {
+        },
+        owner: this
+	});
+    
 
 
     /**
