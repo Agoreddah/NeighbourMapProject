@@ -1,198 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Neighbour map project</title>
-  <meta name="description" content="P5 task">
-  <meta name="author" content="Tomas Chudjak">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Critical CSS
-  ––––––––––––––––––––––––––––––––––––––––––––––––––-->
-    <style>
-img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,optgroup,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre,textarea{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}table{border-collapse:collapse;border-spacing:0}.gmnoprint .gm-style-cc,.gm-style-cc,a[href^="https://maps.google.com/maps"]{display:none !important}
-    </style>
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/pifko.min.css">
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
-
-</head>
-<body>
-
-    <!-- Primary Page Layout
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-
-    <div class="page-wrapper" data-bind="template: {name : ROUTE}">
-    </div>
-    
-    <!-- Login page -->
-    <script type="text/template" id="login">
-        <div id="login-page">
-            <div class="map-image">
-                <h1 class="logo"><span class="fl">P</span>ifko</h1>
-                <div class="pointer pointer1">
-                    <div class="pointer-wrapper">
-                        <div class="pointer-icon pointer-icon1"></div>
-                        <div class="pointer-shadow shadow1"></div>
-                    </div>
-                </div>
-                <div class="pointer pointer2">
-                    <div class="pointer-wrapper">
-                        <div class="pointer-icon pointer-icon2"></div>
-                        <div class="pointer-shadow shadow1"></div>
-                    </div>
-                </div>
-                <div class="pointer pointer3">
-                    <div class="pointer-wrapper">
-                        <div class="pointer-icon pointer-icon3"></div>
-                        <div class="pointer-shadow shadow1"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="container" data-bind="pointers">
-                <div class="intro-text">
-                	<p>Do you want to know
-                        <br />where people usually go?</p>
-                    <button type="button" data-bind="click : initApplication" class="button button-cyan centered mtop-30">Explore Zilina</button>
-                    
-                </div>
-            </div>
-        </div>
-
-    </script>
-    <!-- #login -->
-
-    <!-- application page -->
-    <script type="text/template" id="application">
-        <div id="application-page" class="container-max">
-            <div class="row">
-            	
-            	<!-- sidebar-left -->
-            	<div class="sidebar sidebar-left four columns toggled">
-            		<!-- menu panel -->
-	            	<div id="menu" class="menu">
-	            		<div class="widget-nav">
-	                		<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-left','-100%');return false;">
-	                			<i class="icon-cancel"></i>
-	                		</a>
-	                    </div>
-	            		<h1 class="menu-logo"><span class="fl">P</span>ifko</h1>
-	            		<p>Project created for Udacity’s front-end developer nanodegree course</p>
-	            		<p>Tomas Chudjak &copy; 2015</p>
-	            		<p><a href="" data-bind="click : logout"><i class="icon-export"></i>logout</a></p>
-	            	</div>
-            	</div>
-            	
-            	<!-- sidebar-right -->
-            	<div class="sidebar sidebar-right four columns toggled">
-            		
-            		<!-- search panel -->
-	                <div id="search" data-position="-100%" class="search widget-search-places sidebar-widget">
-	                    <h2 class="list-title">All places around 
-	                    	<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-right','100%');return false;">
-	                			<i class="icon-cancel"></i>
-	                		</a>
-	                	</h2>
-	                    <input type="search" placeholder="Search places" class="search-input" data-bind="value: search, valueUpdate: 'keyup'" />
-	                    <ul class="places-list" data-bind="foreach: filteredData, visible: filteredData().length > 0 ">
-	                        <li>
-	                            <h3 class="place-list-title" data-bind="text: name, click: $root.goToPlace"></h3>
-	                            <p class="place-list-category" data-bind="text: categories[0].shortName"></p>
-	                        </li>
-	                    </ul>
-	                    <p data-bind="visible: filteredData().length === 0">No places found</p>
-	                </div>
-	                
-	                <!-- single place -->
-	                <div id="single-place" data-position="100%" class="sidebar-widget widget-single-place toggled">
-	                    <div class="place-info" data-bind="with: chosenPlace">
-	                    	<div class="widget-nav">
-	                    		<a href="" data-bind="click : $root.backToTheList">
-	                				<i class="icon-left-open-big"></i><span>back to the list</span>
-	                			</a>
-	                			<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-right','100%');return false;">
-	                				<i class="icon-cancel"></i>
-	                			</a>
-	                    	</div>
-	                        <h2 class="place-title" data-bind="text: name"></h2>
-	                        <p data-bind="text: categories[0].shortName"></p>
-	                        <p data-bind="text: location.address"></p>
-	                        <p data-bind="text: contact.phone"></p>
-	                    </div>
-	                    <div class="place-gallery">
-	                        <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
-	                            <li>
-	                                <img data-bind="attr : { src : $data }" alt="" />
-	                            </li>
-	                        </ul>
-
-	                         <p data-bind="visible: PHOTOS_ALBUM().length === 0">No photos found</p>
-
-	                    </div>
-	                </div>
-                </div>
-                
-                <!-- map -->
-                <div id="map-canvas" class="twelve columns" data-bind="map"></div>
-
-            </div>
-            
-            <!-- navigation -->
-            <div id="nav" class="navigation row">
-            	<div class="container">
-	            	<ul data-bind="foreach: SUBPAGES">
-	            		<li data-bind="css : { selected: $data == $root.SUBPAGE()}">
-	            			<a href="" data-bind="click : Application.toggleSidebar">
-	            			<i data-bind="attr : {'class' : 'icon-'+$data}"></i>
-	            			<span class="nav-text" data-bind="text: $data"></span>
-	            			</a>
-	            		</li>
-	            	</ul>
-            	</div>
-            </div>
-        </div>
-    </script>
-    <!-- #application -->
-    
-    <!-- messages -->
-    <div class="error-message">
-    	<span class="error-text"></span>
-    	<span class="icon-cancel close-message" onclick="Application.closeMessage();"></span>
-    </div>
-    
-    <!-- hidden fields
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <input type="hidden" id="userLatitude" name="userLatitude" value="" />
-    <input type="hidden" id="userLongitude" name="userLongitude" value="" />
-
-    <!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <script src="js/vendors/jquery.min.js"></script>
-    <script src="js/vendors/animation/TweenMax.min.js"></script>
-    <script src="js/vendors/sammy.min.js"></script>
-    <script src="js/vendors/knockout.min.js"></script>
-    <script src="js/main.min.js"></script>
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEaeUgDHN2lqUyjZMn9CngDbhEIBfqOe8&callback=Application.initMap" async defer></script>
-    <script>
-        var Application = new App();
-        ko.applyBindings(Application);
-
-        jQuery('document').ready(function() {
-            //
-        });
-
-    </script>
-</body>
-
+   <head>
+      <!-- Basic Page Needs
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <meta charset="utf-8">
+      <title>Neighbour map project</title>
+      <meta name="description" content="P5 task">
+      <meta name="author" content="Tomas Chudjak">
+      <!-- Mobile Specific Metas
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Critical CSS
+         ––––––––––––––––––––––––––––––––––––––––––––––––––-->
+      <style>
+         img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,optgroup,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre,textarea{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}table{border-collapse:collapse;border-spacing:0}.gmnoprint .gm-style-cc,.gm-style-cc,a[href^="https://maps.google.com/maps"]{display:none !important}
+      </style>
+      <!-- CSS
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <link rel="stylesheet" href="css/pifko.min.css">
+      <!-- Favicon
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <link rel="icon" type="image/png" href="images/favicon.png">
+   </head>
+   <body>
+      <!-- Primary Page Layout
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <div class="page-wrapper" data-bind="template: {name : ROUTE}"></div>
+      <!-- Login page -->
+      <script type="text/template" id="login">
+         <div id="login-page">
+             <div class="map-image">
+                 <h1 class="logo"><span class="fl">P</span>ifko</h1>
+                 <div class="pointer pointer1">
+                     <div class="pointer-wrapper">
+                         <div class="pointer-icon pointer-icon1"></div>
+                         <div class="pointer-shadow shadow1"></div>
+                     </div>
+                 </div>
+                 <div class="pointer pointer2">
+                     <div class="pointer-wrapper">
+                         <div class="pointer-icon pointer-icon2"></div>
+                         <div class="pointer-shadow shadow1"></div>
+                     </div>
+                 </div>
+                 <div class="pointer pointer3">
+                     <div class="pointer-wrapper">
+                         <div class="pointer-icon pointer-icon3"></div>
+                         <div class="pointer-shadow shadow1"></div>
+                     </div>
+                 </div>
+             </div>
+             <div class="container" data-bind="pointers">
+                 <div class="intro-text">
+                 	<p>Do you want to know
+                         <br />where people usually go?</p>
+                     <button type="button" data-bind="click : initApplication" class="button button-cyan centered mtop-30">Explore Zilina</button>
+                     
+                 </div>
+             </div>
+         </div>
+         
+      </script>
+      <!-- #login -->
+      <!-- application page -->
+      <script type="text/template" id="application">
+         <div id="application-page" class="container-max">
+             <div class="row">
+             	
+             	<!-- sidebar-left -->
+             	<div class="sidebar sidebar-left four columns toggled">
+             		<!-- menu panel -->
+              	<div id="menu" class="menu">
+              		<div class="widget-nav">
+                  		<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-left','-100%');return false;">
+                  			<i class="icon-cancel"></i>
+                  		</a>
+                      </div>
+              		<h1 class="menu-logo"><span class="fl">P</span>ifko</h1>
+              		<p>Project created for Udacity’s front-end developer nanodegree course</p>
+              		<p>Tomas Chudjak &copy; 2015</p>
+              		<p><a href="" data-bind="click : logout"><i class="icon-export"></i>logout</a></p>
+              	</div>
+             	</div>
+             	
+             	<!-- sidebar-right -->
+             	<div class="sidebar sidebar-right four columns toggled">
+             		
+             		<!-- search panel -->
+                  <div id="search" data-position="-100%" class="search widget-search-places sidebar-widget">
+                      <h2 class="list-title">All places around 
+                      	<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-right','100%');return false;">
+                  			<i class="icon-cancel"></i>
+                  		</a>
+                  	</h2>
+                      <input type="search" placeholder="Search places" class="search-input" data-bind="value: search, valueUpdate: 'keyup'" />
+                      <ul class="places-list" data-bind="foreach: filteredData, visible: filteredData().length > 0 ">
+                          <li>
+                              <h3 class="place-list-title" data-bind="text: name, click: $root.goToPlace"></h3>
+                              <p class="place-list-category" data-bind="text: categories[0].shortName"></p>
+                          </li>
+                      </ul>
+                      <p data-bind="visible: filteredData().length === 0">No places found</p>
+                  </div>
+                  
+                  <!-- single place -->
+                  <div id="single-place" data-position="100%" class="sidebar-widget widget-single-place toggled">
+                      <div class="place-info" data-bind="with: chosenPlace">
+                      	<div class="widget-nav">
+                      		<a href="" data-bind="click : $root.backToTheList">
+                  				<i class="icon-left-open-big"></i><span>back to the list</span>
+                  			</a>
+                  			<a href="" class="close-button right" onclick="Application.hideElement('.sidebar-right','100%');return false;">
+                  				<i class="icon-cancel"></i>
+                  			</a>
+                      	</div>
+                          <h2 class="place-title" data-bind="text: name"></h2>
+                          <p data-bind="text: categories[0].shortName"></p>
+                          <p data-bind="text: location.address"></p>
+                          <p data-bind="text: contact.phone"></p>
+                      </div>
+                      <div class="place-gallery">
+                          <ul data-bind="foreach: PHOTOS_ALBUM, visible: PHOTOS_ALBUM().length > 0">
+                              <li>
+                                  <img data-bind="attr : { src : $data }" alt="" />
+                              </li>
+                          </ul>
+         
+                           <p data-bind="visible: PHOTOS_ALBUM().length === 0">No photos found</p>
+         
+                      </div>
+                  </div>
+                 </div>
+                 
+                 <!-- map -->
+                 <div id="map-canvas" class="twelve columns" data-bind="map"></div>
+         
+             </div>
+             
+             <!-- navigation -->
+             <div id="nav" class="navigation row">
+             	<div class="container">
+              	<ul data-bind="foreach: SUBPAGES">
+              		<li data-bind="css : { selected: $data == $root.SUBPAGE()}">
+              			<a href="" data-bind="click : Application.toggleSidebar">
+              			<i data-bind="attr : {'class' : 'icon-'+$data}"></i>
+              			<span class="nav-text" data-bind="text: $data"></span>
+              			</a>
+              		</li>
+              	</ul>
+             	</div>
+             </div>
+         </div>
+      </script>
+      <!-- #application -->
+      <!-- messages -->
+      <div class="error-message">
+         <span class="error-text"></span>
+         <span class="icon-cancel close-message" onclick="Application.closeMessage();"></span>
+      </div>
+      <!-- hidden fields
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <input type="hidden" id="userLatitude" name="userLatitude" value="" />
+      <input type="hidden" id="userLongitude" name="userLongitude" value="" />
+      <!-- End Document
+         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <script src="js/vendors/jquery.min.js"></script>
+      <script src="js/vendors/animation/TweenMax.min.js"></script>
+      <script src="js/vendors/sammy.min.js"></script>
+      <script src="js/vendors/knockout.min.js"></script>
+      <script src="js/main.min.js"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEaeUgDHN2lqUyjZMn9CngDbhEIBfqOe8&callback=Application.initMap" async defer></script>
+      <script>
+         var Application = new App();
+         ko.applyBindings(Application);
+         
+         jQuery('document').ready(function() {
+             //
+         });
+         
+      </script>
+   </body>
 </html>

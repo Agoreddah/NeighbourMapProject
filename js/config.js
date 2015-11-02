@@ -8,15 +8,13 @@
  * Version: 1.0.0
  *
  */
-
 /* exported Config */
-
-var Config = function(){
+var Config = function() {
     "use strict";
 
     // console logging true|false
     this.DEBUG = false;
-    
+
     // user session key
     this.SESSION_KEY = 'PifkoSessionKey';
 
@@ -24,7 +22,7 @@ var Config = function(){
     this.LOGIN_ID = 'login';
     this.APP_ID = 'application';
     this.MAPCANVAS_ID = 'map-canvas';
-    
+
     // messages
     this.ERROR_MSG = 'Error while retrieving data. Please refresh the page or try again later!';
 
@@ -39,7 +37,7 @@ var Config = function(){
     this.DRINK_ICON = this.iconFolder + '/drink-icon-normal.png';
 
     // Default google map options
-    this.MAPOPTIONS = function(lat, lng){
+    this.MAPOPTIONS = function(lat, lng) {
         var options = {};
 
         options.center = {};
@@ -50,24 +48,23 @@ var Config = function(){
 
         return options;
     };
-    
+
     // Custom map styles
-    this.MAPSTYLES = [
-	  {
-	    "featureType": "poi",
-	    "stylers": [
-	      { "visibility": "off" }
-	    ]
-	  }
-	  // colored map, not satisfied
-	  /*,{
-	    "featureType": "landscape",
-	    "stylers": [
-	      { "visibility": "on" },
-	      { "weight": 0.1 },
-	      { "hue": "#0011ff" }
-	    ]
-	  }*/
-	];
+    this.MAPSTYLES = [{
+            "featureType": "poi",
+            "stylers": [{
+                "visibility": "off"
+            }]
+        }
+        // colored map, not satisfied
+        /*,{
+          "featureType": "landscape",
+          "stylers": [
+            { "visibility": "on" },
+            { "weight": 0.1 },
+            { "hue": "#0011ff" }
+          ]
+        }*/
+    ];
 
 };

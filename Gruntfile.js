@@ -42,7 +42,7 @@ module.exports = function(grunt){
         cssmin : {
             target : {
                 files : {
-                    'dist/css/pifko.min.css' : ['css/skeleton.css','css/icons.css','css/pifko.css']
+                    'dist/css/pifko.min.css' : ['css/skeleton.css','css/fonts.css','css/icons.css','css/pifko.css']
                 }
             }
         },

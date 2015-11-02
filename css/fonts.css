@@ -1,22 +1,20 @@
-@font-face {
-    font-family: 'Noto Bold';
-    src: url('../fonts/notosans-bold-webfont.eot');
-    src: url('../fonts/notosans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/notosans-bold-webfont.woff') format('woff'),
-         url('../fonts/notosans-bold-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+@font-face
+{
+	font-family: 'Noto Bold';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/notosans-bold-webfont.eot');
+	src: url('../fonts/notosans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+ url('../fonts/notosans-bold-webfont.woff') format('woff'),
+ url('../fonts/notosans-bold-webfont.ttf') format('truetype');
 }
-
-
-
-
-@font-face {
-    font-family: 'Noto Regular';
-    src: url('../fonts/notosans-regular-webfont.eot');
-    src: url('../fonts/notosans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/notosans-regular-webfont.woff') format('woff'),
-         url('../fonts/notosans-regular-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+@font-face
+{
+	font-family: 'Noto Regular';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/notosans-regular-webfont.eot');
+	src: url('../fonts/notosans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+ url('../fonts/notosans-regular-webfont.woff') format('woff'),
+ url('../fonts/notosans-regular-webfont.ttf') format('truetype');
 }
