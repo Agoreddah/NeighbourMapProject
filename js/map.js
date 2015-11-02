@@ -94,6 +94,45 @@ var Map = function(){
     	marker.setAnimation(null);
     };
     
+    /**
+     * Show marker on the map
+     * @param marker - marker object reference 
+     */
+    MAP.markerShow = function(marker){
+    	marker.setVisible(true);
+    };
+
+    /**
+     * Hide all markers on the map
+     * @param markersArr - observable array with all markers 
+     */
+    MAP.markerShowAll = function(markersArr){
+    	var i = 0, 
+    		len = markersArr.length;
+    	for(i, len; i < len; i++){
+    		MAP.markerShow(markersArr[i]);
+    	}
+    };
+    
+    /**
+     * Hide marker on the map
+     * @param marker - marker object reference 
+     */
+    MAP.markerHide = function(marker){
+    	marker.setVisible(false);
+    };
+    
+    /**
+     * Hide all markers on the map
+     * @param markersArr - observable array with all markers 
+     */
+    MAP.markerHideAll = function(markersArr){
+    	var i = 0, 
+    		len = markersArr.length;
+    	for(i, len; i < len; i++){
+    		MAP.markerHide(markersArr[i]);
+    	}
+    };
     
     /**
      * Multiple bounce animation

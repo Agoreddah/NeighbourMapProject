@@ -36,13 +36,14 @@ var App = function(){
     ///////////////////////////////////////////////
 
     /** DATA contains returned JSON object from Foursquare */
-    self.DATA = ko.observableArray([]);
-    self.PHOTOS = ko.observableArray([]);
-    self.PHOTOS_ALBUM = ko.observableArray([]);
+    self.DATA = ko.observableArray();
+    self.PHOTOS = ko.observableArray();
+    self.PHOTOS_ALBUM = ko.observableArray();
     
     /** MARKERS stores selecter users markers */
-    self.MARKERS = ko.observableArray([]);
-    self.ACTIVE_MARKERS = ko.observableArray([]);
+    self.MARKERS = ko.observableArray();
+    self.ACTIVE_MARKERS = ko.observableArray();
+    self.VISIBLE_MARKERS = ko.observableArray();
     
     /** PAGER stores current routing value */
     self.ROUTE = ko.observable('login');
@@ -84,12 +85,17 @@ var App = function(){
      * We use arrayFilter to filter self.DATA by the given string stored in self.search()
      * #Fixed ko.computable bug. Read and write options has been missing
      */
-    self.filteredData = ko.computed({
+    self.filteredData = ko.computed({    	
 		read: function () {
             var filter = self.search();
             if (!filter) {
+            	// show all markers
+            	MAP.markerShowAll(self.MARKERS());        	
             	return self.DATA();
         	} else {
+        		//hide all markers first    
+	            MAP.markerHideAll(self.MARKERS());
+	            
           		return ko.utils.arrayFilter(self.DATA(), function (item) {
                 	// remove Uppercase and diacritics from the item names and search string
 	                var place = item.name,
@@ -97,8 +103,19 @@ var App = function(){
 	                    loweredFilter = filter.toLowerCase(),
 	                    rawPlace = self.removeDiacritics(loweredPlace),
 	                    rawFilter = self.removeDiacritics(loweredFilter);
-
+	                    
 	                if(rawPlace.indexOf(rawFilter) > -1){
+	                	var i = 0,
+	                		len = self.MARKERS().length;
+	                	
+	                	// show only searched marker
+	                	for(i, len; i < len; i++){
+	                		if(self.MARKERS()[i].id === item.id){
+	                			MAP.markerShow(self.MARKERS()[i]);
+	                		}
+	                	}
+
+	                	// return searched item
 	                    return item;
 	                }
         		});
@@ -637,12 +654,14 @@ var App = function(){
     };
     
     /**
-     * Store created marker to self.MARKERS observable
+     * Store created marker to self.MARKERS observable array
+     * Store created marker to self.VISIBLE_MARKERS observable array
      * this will help to manage marker actions
      * @param marker - marker object reference 
      */
     self.storeMarker = function(marker){
     	self.MARKERS.push(marker);
+    	self.VISIBLE_MARKERS.push(marker);
     };
 
     /**
