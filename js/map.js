@@ -15,7 +15,7 @@ var Map = function(){
     "use strict";
 
     var MAP = {},
-        INFOWINDOW = new google.maps.InfoWindow({});
+        INFOWINDOW;
 
     /**
      * Create google map marker
@@ -167,6 +167,7 @@ var Map = function(){
      * @param data - data object we want to display in google map
      */
     MAP.createInfoWindow = function(googlemap, marker, data){
+    	INFOWINDOW = new google.maps.InfoWindow({});
         marker.addListener('click', function(){
             // call the goToPlace function and push this data object to it
             Application.goToPlace(data);

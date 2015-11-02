@@ -15,7 +15,7 @@ var Config = function(){
     "use strict";
 
     // console logging true|false
-    this.DEBUG = true;
+    this.DEBUG = false;
     
     // user session key
     this.SESSION_KEY = 'PifkoSessionKey';

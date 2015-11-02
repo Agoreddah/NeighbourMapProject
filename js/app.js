@@ -14,7 +14,7 @@
  * Animation functions use tweenlite js - http://greensock.com/docs/#/HTML5/GSAP/TweenLite/
  */
 
-/* globals document, console, localStorage, location, setTimeout, google, ko, Config, Navigation, Map, Foursquare, TweenLite, TimelineLite, Power1, jQuery, Sammy */
+/* globals document, console, localStorage, location, setTimeout, window, google, ko, Config, Navigation, Map, Foursquare, TweenLite, TimelineLite, Power1, jQuery, Sammy */
 /* exported App */
 
 var App = function(){
@@ -532,8 +532,14 @@ var App = function(){
     self.initMap = function(){
         // TODO create functionality to parse user's position
         // navigator.geolocation.getCurrentPosition(self.parsePosition);        
-        self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));        
-        GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);
+        
+        // get data from Foursquare
+        self.getJSON(FOURSQUARE.dataUrl(CONFIG.ZA_LAT, CONFIG.ZA_LNG));
+        
+        // if DOM and google scripts is ready, create google map
+        if(jQuery('#map-canvas').length && typeof window.google !== "undefined"){
+        	GOOGLEMAP = self.createMap(CONFIG.ZA_LAT,CONFIG.ZA_LNG);	
+        }
     };
 
     /**

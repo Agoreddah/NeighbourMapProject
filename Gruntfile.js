@@ -56,6 +56,11 @@ module.exports = function(grunt){
                 }
             },
             buildSimple : {
+            	// better debug
+            	options: {
+        			beautify : true,
+        			preserveComments : 'all'
+        		},
                 files : {
                     'dist/js/main.min.js' : ['js/config.js','js/navigation.js','js/foursquare.js','js/map.js','js/app.js']
                 }
